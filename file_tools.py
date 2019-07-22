@@ -1,7 +1,6 @@
 from os import listdir
 from os.path import isfile, join
 import path_constants
-import h5py
 
 
 def get_paths_to_files_in_directory(directory):
