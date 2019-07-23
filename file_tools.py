@@ -12,5 +12,5 @@ def get_run_path(run_number=0):
     return join(directory, get_paths_to_files_in_directory(directory)[run_number])
 
 
-def get_beam_profiles(current_run):
-    return current_run[path_constants.beam_profiles_path]
+def get_beam_profiles(run):
+    return run[path_constants.beam_profiles_path]
