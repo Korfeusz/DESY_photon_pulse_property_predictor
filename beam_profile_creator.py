@@ -19,5 +19,5 @@ class BeamProfileCreator:
         color_resolution = new_resolution
         return BeamProfileCreator(data, color_resolution)
 
-    def get_beam_profile_rounded_to_int(self):
-        return self.beam_profile_data.astype(np.int)
+    def get_rounded_beam_profile(self):
+        return np.round(self.beam_profile_data)
