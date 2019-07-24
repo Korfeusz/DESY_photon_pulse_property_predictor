@@ -1,22 +1,21 @@
 import file_tools
-import h5py
 import matplotlib.pyplot as plt
 import numpy as np
 
 if __name__ == '__main__':
     image_number = 20
     run_number = 3
-    beam_profile = file_tools.get_one_beam_profile(run_number=run_number, profile_number=image_number)
-
     desired_color_bits = 63
-    initial_color_bits = 4095
-    horizontal_slice = (94, 350)
-    vertical_slice = (94, 350)
-    current_beam_profile = (beam_profile[vertical_slice[0]:vertical_slice[1],
-                            horizontal_slice[0]:horizontal_slice[1]]
-                            / initial_color_bits * desired_color_bits).astype(np.int)
+    horizontal_min, horizontal_max = 0, 230
+    vertical_min, vertical_max = 0, 200
+
+    beam_profile = file_tools.get_beam_profile_creator(run_number=run_number, profile_number=image_number)\
+        .slice_horizontally(h_min=horizontal_min, h_max=horizontal_max)\
+        .slice_vertically(v_min=vertical_min, v_max=vertical_max)\
+        .change_color_resolution(desired_color_bits)\
+        .get_beam_profile_rounded_to_int()
 
     plt.imsave('save_test.png',
-               current_beam_profile,
+               beam_profile,
                cmap=plt.cm.jet)
-    print(current_beam_profile.max())
+    print(beam_profile.max())
