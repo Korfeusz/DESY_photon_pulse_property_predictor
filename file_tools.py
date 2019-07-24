@@ -1,6 +1,8 @@
 from os import listdir
 from os.path import isfile, join
 import path_constants
+from numpy.random import rand
+import h5py
 
 
 def get_paths_to_files_in_directory(directory):
@@ -12,5 +14,13 @@ def get_run_path(run_number=0):
     return join(directory, get_paths_to_files_in_directory(directory)[run_number])
 
 
-def get_beam_profiles(run):
-    return run[path_constants.beam_profiles_path]
+def get_beam_profiles(run_number=0):
+    if path_constants.MOCK:
+        return (rand(100, 200, 230) * 4095).astype(int)
+    else:
+        with h5py.File(get_run_path(run_number=run_number), 'r') as current_run:
+            return current_run[path_constants.beam_profiles_path]
+
+
+def get_one_beam_profile(run_number=0, profile_number=0):
+    return get_beam_profiles(run_number=run_number)[profile_number]
