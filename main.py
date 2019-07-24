@@ -1,6 +1,5 @@
 import file_tools
-import matplotlib.pyplot as plt
-import numpy as np
+import beam_profile_imaging
 
 if __name__ == '__main__':
     image_number = 20
@@ -15,7 +14,4 @@ if __name__ == '__main__':
         .change_color_resolution(desired_color_bits)\
         .get_beam_profile_rounded_to_int()
 
-    plt.imsave('save_test.png',
-               beam_profile,
-               cmap=plt.cm.jet)
-    print(beam_profile.max())
+    beam_profile_imaging.save_beam_profile_image(beam_profile, name='save_test.png')
