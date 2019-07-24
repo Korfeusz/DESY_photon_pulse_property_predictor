@@ -3,6 +3,7 @@ from os.path import isfile, join
 import path_constants
 from numpy.random import rand
 import h5py
+from beam_profile_creator import BeamProfileCreator
 
 
 def get_paths_to_files_in_directory(directory):
@@ -22,5 +23,6 @@ def get_beam_profiles(run_number=0):
             return current_run[path_constants.beam_profiles_path]
 
 
-def get_one_beam_profile(run_number=0, profile_number=0):
-    return get_beam_profiles(run_number=run_number)[profile_number]
+def get_beam_profile_creator(run_number=0, profile_number=0):
+    beam_profiles = get_beam_profiles(run_number=run_number)
+    return BeamProfileCreator(data=beam_profiles[profile_number])
