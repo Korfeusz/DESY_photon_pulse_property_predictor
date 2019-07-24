@@ -12,6 +12,7 @@ if __name__ == '__main__':
         .slice_horizontally(h_min=horizontal_min, h_max=horizontal_max)\
         .slice_vertically(v_min=vertical_min, v_max=vertical_max)\
         .change_color_resolution(desired_color_bits)\
-        .get_beam_profile_rounded_to_int()
+        .get_rounded_beam_profile()
 
     beam_profile_imaging.save_beam_profile_image(beam_profile, name='save_test.png')
+    print(beam_profile.max())
