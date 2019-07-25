@@ -1,6 +1,6 @@
 import numpy as np
 import beam_profile_imaging
-
+from skimage import morphology
 
 def change_color_resolution(data, new_resolution, old_resolution):
     return data / old_resolution * new_resolution
@@ -13,7 +13,8 @@ def get_flattened_shape(data):
 
 def get_nth_lowest_vals(data, n=2):
     flat_shape = get_flattened_shape(data)
-    return [x[n-1] for x in np.array(list(map(np.unique, np.reshape(data, flat_shape))))]
+    array_of_unique_values = np.array(list(map(np.unique, np.reshape(data, flat_shape))))
+    return [x[n-1] if len(x) > n else min(x) for x in array_of_unique_values]
 
 
 def create_mask_from_lowest_vals(data, nth_lowest_values):
@@ -35,12 +36,15 @@ def subtract_background(data, converted_highest_background_values):
     return np.reshape([x - y for x, y in zip(np.reshape(data, flat_shape), converted_highest_background_values)], data.shape)
 
 
+def grayscale_opening(data):
+    return np.array(list(map(morphology.opening, data)))
+
+
 def remove_background(data, initial_color_resolution, processing_color_resolution, number_of_lowest_to_cut=2):
     mask = change_color_resolution(data=data,
                                    new_resolution=processing_color_resolution,
                                    old_resolution=initial_color_resolution)
     mask = np.round(mask)
-    beam_profile_imaging.save_beam_profile_image(mask[1, :, :], name='bckgrnd.png')
     nth_lowest_values = get_nth_lowest_vals(mask, n=number_of_lowest_to_cut)
     mask = create_mask_from_lowest_vals(mask, nth_lowest_values=nth_lowest_values)
     converted_highest_background_values = convert_values_to_initial_resolution(nth_lowest_values,
