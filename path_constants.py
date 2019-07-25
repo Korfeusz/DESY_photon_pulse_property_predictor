@@ -1,4 +1,4 @@
-MOCK = True
+MOCK = False
 # File-system level paths
 experiment_data_directory = '/asap3/flash/gpfs/fl21/2019/data/11007852/raw/hdf/by-run/'
 

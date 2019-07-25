@@ -5,7 +5,7 @@ import numpy as np
 class BeamProfilesPipeline:
     def __init__(self, data, color_resolution=constants.BEAM_PROFILE_COLOR_RESOLUTION):
         self.beam_profile_data = data
-        self.shape = self.beam_profile_data.shape
+        self.shape = np.shape(self.beam_profile_data)
         self.color_resolution = color_resolution
 
     def slice_horizontally(self, h_min, h_max):

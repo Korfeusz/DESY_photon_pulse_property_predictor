@@ -16,12 +16,17 @@ def get_run_path(run_number=0):
     return join(directory, get_paths_to_files_in_directory(directory)[run_number])
 
 
-def get_beam_profiles_pipeline(run_number=0):
+def get_run(run_number=0):
+    return h5py.File(get_run_path(run_number=run_number))
+
+
+def get_beam_profiles_pipeline(current_run, clip_to_ten_profiles=False):
     if path_constants.MOCK:
         data = np.round(np.random.rand(100, 200, 230) * constants.BEAM_PROFILE_COLOR_RESOLUTION)
     else:
-        with h5py.File(get_run_path(run_number=run_number), 'r') as current_run:
-            data = current_run[path_constants.beam_profiles_path]
+        data = current_run[path_constants.beam_profiles_path]
+        if clip_to_ten_profiles:
+            data = data[0:10, :, :]
     return BeamProfilesPipeline(data=data)
 
 
