@@ -1,6 +1,6 @@
 import numpy as np
-import beam_profile_imaging
 from skimage import morphology
+
 
 def change_color_resolution(data, new_resolution, old_resolution):
     return data / old_resolution * new_resolution
