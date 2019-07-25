@@ -26,9 +26,13 @@ def put_zeros_under_mask(data, mask):
     return data
 
 
-def subtract_background(data, highest_background_value):
+def convert_values_to_initial_resolution(values, initial_color_resolution, processing_color_resolution):
+    return np.array(values) / processing_color_resolution * initial_color_resolution
+
+
+def subtract_background(data, converted_highest_background_values):
     flat_shape = get_flattened_shape(data)
-    return np.reshape([x - y for x, y in zip(np.reshape(data, flat_shape), highest_background_value)], data.shape)
+    return np.reshape([x - y for x, y in zip(np.reshape(data, flat_shape), converted_highest_background_values)], data.shape)
 
 
 def remove_background(data, initial_color_resolution, processing_color_resolution, number_of_lowest_to_cut=2):
@@ -38,8 +42,10 @@ def remove_background(data, initial_color_resolution, processing_color_resolutio
     mask = np.round(mask)
     beam_profile_imaging.save_beam_profile_image(mask[1, :, :], name='bckgrnd.png')
     nth_lowest_values = get_nth_lowest_vals(mask, n=number_of_lowest_to_cut)
-    print(nth_lowest_values)
     mask = create_mask_from_lowest_vals(mask, nth_lowest_values=nth_lowest_values)
+    converted_highest_background_values = convert_values_to_initial_resolution(nth_lowest_values,
+                                                                               initial_color_resolution,
+                                                                               processing_color_resolution)
+    data = subtract_background(data, converted_highest_background_values=converted_highest_background_values)
     data = put_zeros_under_mask(data, mask)
-    data = subtract_background(data, highest_background_value=nth_lowest_values)
     return data
