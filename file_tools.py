@@ -18,7 +18,7 @@ def get_run_path(run_number=0):
 
 
 @contextmanager
-def get_run(run_number):
+def get_run(run_number=0):
     current_run = h5py.File(get_run_path(run_number=run_number))
     yield current_run
     current_run.close()
