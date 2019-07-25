@@ -3,7 +3,7 @@ import beam_profile_imaging
 import time
 
 if __name__ == '__main__':
-    image_number = 3
+    image_number = 100
     t = time.time()
     with file_tools.get_run(run_number=3) as current_run:
         beam_profiles = file_tools\
