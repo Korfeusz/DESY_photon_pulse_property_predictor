@@ -19,6 +19,10 @@ def shift_down(image, value):
 
 
 def shift_by_values(image, horizontal, vertical):
+    if np.abs(horizontal) > image.shape[1]:
+        horizontal = np.sign(horizontal) * image.shape[1]
+    if np.abs(vertical) > image.shape[0]:
+        vertical = np.sign(vertical) * image.shape[0]
     if horizontal > 0:
         image = shift_right(image, horizontal)
     elif horizontal < 0:
@@ -35,6 +39,8 @@ def get_geometric_center(image):
 
 
 def get_center_of_mass(image):
+    if np.count_nonzero(image) == 0:
+        return get_geometric_center(image)
     return np.array(scipy.ndimage.measurements.center_of_mass(image)).astype(np.int)
 
 
