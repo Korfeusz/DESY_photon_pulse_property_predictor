@@ -30,5 +30,6 @@ def get_beam_profiles_pipeline(current_run, clip_to_ten_profiles=False):
     else:
         data = current_run[path_constants.beam_profiles_path]
         if clip_to_ten_profiles:
+            print(np.shape(data))
             data = data[0:10, :, :]
     return BeamProfilesPipeline(data=data)

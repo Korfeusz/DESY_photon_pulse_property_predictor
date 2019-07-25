@@ -29,6 +29,10 @@ class BeamProfilesPipeline:
                                                          number_of_lowest_to_cut=number_of_lowest_colors)
         return BeamProfilesPipeline(data, self.color_resolution)
 
+    def opening(self):
+        return BeamProfilesPipeline(background_remove_tools.grayscale_opening(self.beam_profile_data),
+                                    self.color_resolution)
+
     def get_rounded_beam_profiles(self):
         return np.round(self.beam_profile_data)
 
