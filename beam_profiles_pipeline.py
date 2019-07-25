@@ -1,7 +1,7 @@
 import constants
 import numpy as np
 import background_remove_tools
-
+import image_shifting
 
 class BeamProfilesPipeline:
     def __init__(self, data, color_resolution=constants.BEAM_PROFILE_COLOR_RESOLUTION):
@@ -31,6 +31,10 @@ class BeamProfilesPipeline:
 
     def opening(self):
         return BeamProfilesPipeline(background_remove_tools.grayscale_opening(self.beam_profile_data),
+                                    self.color_resolution)
+
+    def shift_to_center_of_mass(self):
+        return BeamProfilesPipeline(image_shifting.shift_com_to_geometric(self.beam_profile_data),
                                     self.color_resolution)
 
     def get_rounded_beam_profiles(self):
