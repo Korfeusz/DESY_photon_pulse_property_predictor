@@ -5,6 +5,7 @@ import numpy as np
 import h5py
 from beam_profiles_pipeline import BeamProfilesPipeline
 import constants
+from contextlib import contextmanager
 
 
 def get_paths_to_files_in_directory(directory):
@@ -16,8 +17,11 @@ def get_run_path(run_number=0):
     return join(directory, get_paths_to_files_in_directory(directory)[run_number])
 
 
-def get_run(run_number=0):
-    return h5py.File(get_run_path(run_number=run_number))
+@contextmanager
+def get_run(run_number):
+    current_run = h5py.File(get_run_path(run_number=run_number))
+    yield current_run
+    current_run.close()
 
 
 def get_beam_profiles_pipeline(current_run, clip_to_ten_profiles=False):
@@ -28,8 +32,3 @@ def get_beam_profiles_pipeline(current_run, clip_to_ten_profiles=False):
         if clip_to_ten_profiles:
             data = data[0:10, :, :]
     return BeamProfilesPipeline(data=data)
-
-
-def get_beam_profile_creator(run_number=0, profile_number=0):
-    beam_profiles = get_beam_profiles_pipeline(run_number=run_number)
-    return BeamProfilesPipeline(data=beam_profiles[profile_number])
