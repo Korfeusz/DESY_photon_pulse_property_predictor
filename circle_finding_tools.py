@@ -1,9 +1,10 @@
 import numpy as np
 
 
-def get_lowest_non_zero_value(image):
-    return np.min(np.nonzero(image))
-
+def get_lowest_non_zero_values(data):
+    data[data == 0] = np.max(data)
+    return np.min(np.min(data, axis=2), axis=1)
+# this will break as data is given through reference...
 
 def calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total):
     return (np.power(r_outer, 2) - np.power(r_inner, 2)) / np.power(r_total, 2)
@@ -31,5 +32,5 @@ def count_all_non_zero_points(data):
     return np.sum(np.sum(data != 0, axis=2), axis=1)
 
 
-def count_non_zero_points_under_mask(image, mask):
-    return np.sum(np.sum((image != 0) & mask, axis=2), axis=1)
+def count_non_zero_points_under_mask(data, masks):
+    return np.sum(np.sum((data != 0) & masks, axis=2), axis=1)
