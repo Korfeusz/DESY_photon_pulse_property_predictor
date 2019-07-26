@@ -23,8 +23,13 @@ def create_matrix_of_distances_from_center(image):
     return np.linalg.norm(np.dstack((x, y)), axis=2)
 
 
-def test_if_point_is_between_two_circles(distance_from_center, r_inner, r_outer):
-    if r_inner <= distance_from_center <= r_outer:
-        return True
-    return False
+def create_ring_mask(r_inner, r_outer, distance_matrix):
+    return (distance_matrix < r_outer) & (distance_matrix > r_inner)
 
+
+def count_all_non_zero_points(data):
+    return np.sum(np.sum(data != 0, axis=2), axis=1)
+
+
+def count_non_zero_points_under_mask(image, mask):
+    return np.sum(np.sum((image != 0) & mask, axis=2), axis=1)
