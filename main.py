@@ -6,8 +6,8 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    image_number = 365
-    profiles_range = False
+    image_number = 74
+    profiles_range = (0, 100)
     h_min, h_max, v_min, v_max = 105, 364, 90, 349
     # h_min, h_max, v_min, v_max = 0, 483, 0, 360
     final_color_resolution = 63
@@ -36,9 +36,11 @@ if __name__ == '__main__':
         print(beam_profiles.shape)
 
         t = time.time()
-        labels = is_circle_in_center_of_images(beam_profiles, ring_thickness=60, number_of_tests=1, relative_tolerance=1e-1)
+        labels = is_circle_in_center_of_images(beam_profiles, ring_thickness=30, number_of_tests=2,
+                                               relative_tolerance=1e-1,
+                                               additive_tolerance=1e-2)
         print(np.where(labels))
-        print(np.where(labels).shape)
+        print(len(np.where(labels)[0]))
         print(labels.shape)
     print('elapsed:', time.time() - t)
 
