@@ -9,6 +9,15 @@ def two_dim_symmetric_gaussian_function(grid, amplitude, mu_x, mu_y, sigma):
     gaussian = amplitude * np.exp(-(((x - mu_x) ** 2) / (2 * sigma ** 2) + ((y - mu_y) ** 2) / (2 * sigma ** 2)))
     return gaussian.ravel()
 
+
+def two_dim_asymmetric_gaussian_function(grid, amplitude, mu_x, mu_y, sigma_x, sigma_y):
+    x, y = grid
+    mu_x = float(mu_x)
+    mu_y = float(mu_y)
+    gaussian = amplitude * np.exp(-(((x - mu_x) ** 2) / (2 * sigma_x ** 2) + ((y - mu_y) ** 2) / (2 * sigma_y ** 2)))
+    return gaussian.ravel()
+
+
 def get_initial_guess(image):
     pass
 

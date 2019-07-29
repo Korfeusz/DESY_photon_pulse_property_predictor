@@ -9,7 +9,6 @@ def is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=2, rel
         r_outer = r_outer - test_no * ring_thickness
         r_inner = r_outer - ring_thickness
         test_result = test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance)
-        print(test_result)
         test_result = test_result & old_test_result
         old_test_result = test_result
     return test_result
@@ -18,7 +17,8 @@ def is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=2, rel
 def test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance):
     experimental_ratio = calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, r_inner, r_outer)
     expected_ratio = calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total)
-    print('expected: {}, got: {}'.format(expected_ratio, experimental_ratio))
+    # print('expected: {}, got: {}'.format(expected_ratio, experimental_ratio))
+    #TODO find a better isclose method that takes into account the moving floating point
     return np.isclose(experimental_ratio,
                       expected_ratio,
                       rtol=relative_tolerance)
@@ -71,12 +71,16 @@ def count_non_zero_points_under_mask(data, masks):
 
 
 if __name__ == '__main__':
-    from gaussian_fit_tools import two_dim_symmetric_gaussian_function
+    from gaussian_fit_tools import two_dim_symmetric_gaussian_function, two_dim_asymmetric_gaussian_function
     import matplotlib.pyplot as plt
     grid = create_grid(np.zeros((219, 219)))
-    gauss = two_dim_symmetric_gaussian_function(grid, 10, 0, 0, 20).reshape((219, 219)).round()
+    gauss = two_dim_asymmetric_gaussian_function(grid, 10, 0, 0, 18, 20).reshape((219, 219))
+    # gauss = gauss +  np.random.random(219*219).reshape((219, 219))
+    gauss = gauss.round()
+    print(gauss.shape)
     plt.imsave('circle_test.png', gauss)
     data = np.array([gauss, gauss])
     # data = np.random.randint(low=0, high=10, size=(2, 41, 41))
     # data = np.ones(shape=(2, 219, 219))
-    val = is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=4, relative_tolerance=1e-2)
+    val = is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=4, relative_tolerance=1e-1)
+    print(val)
