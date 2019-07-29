@@ -2,9 +2,8 @@ import numpy as np
 
 
 def get_lowest_non_zero_values(data):
-    data[data == 0] = np.max(data)
-    return np.min(np.min(data, axis=2), axis=1)
-# this will break as data is given through reference...
+    return np.nanmin(np.nanmin(np.where(data == 0, np.nan, data), axis=2), axis=1)
+
 
 def calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total):
     return (np.power(r_outer, 2) - np.power(r_inner, 2)) / np.power(r_total, 2)
