@@ -1,8 +1,27 @@
 import numpy as np
 
 
-def get_lowest_non_zero_values(data):
-    return np.nanmin(np.nanmin(np.where(data == 0, np.nan, data), axis=2), axis=1)
+def is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=2, relative_tolerance=1e-5):
+    r_total = get_mask_radii(data)
+    r_outer = r_total
+    old_test_result = np.ones(shape=data.shape[0]).astype(np.bool)
+    for test_no in range(number_of_tests):
+        r_outer = r_outer - test_no * ring_thickness
+        r_inner = r_outer - ring_thickness
+        test_result = test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance)
+        print(test_result)
+        test_result = test_result & old_test_result
+        old_test_result = test_result
+    return test_result
+
+
+def test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance):
+    experimental_ratio = calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, r_inner, r_outer)
+    expected_ratio = calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total)
+    print('expected: {}, got: {}'.format(expected_ratio, experimental_ratio))
+    return np.isclose(experimental_ratio,
+                      expected_ratio,
+                      rtol=relative_tolerance)
 
 
 def calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total):
@@ -60,7 +79,4 @@ if __name__ == '__main__':
     data = np.array([gauss, gauss])
     # data = np.random.randint(low=0, high=10, size=(2, 41, 41))
     # data = np.ones(shape=(2, 219, 219))
-    radii = get_mask_radii(data)
-    experimental_ratio = calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, radii - 5, radii)
-    expected_ratio = calculate_expected_ratio_inside_ribbon_to_entire_disk(radii - 5, radii, radii)
-    print('Expected: {}, got: {}, radii: {}'.format(expected_ratio, experimental_ratio, radii))
+    val = is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=4, relative_tolerance=1e-2)
