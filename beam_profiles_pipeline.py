@@ -2,6 +2,8 @@ import constants
 import numpy as np
 import background_remove_tools
 import image_shifting
+import skimage
+
 
 class BeamProfilesPipeline:
     def __init__(self, data, color_resolution=constants.BEAM_PROFILE_COLOR_RESOLUTION):
@@ -40,3 +42,7 @@ class BeamProfilesPipeline:
     def get_rounded_beam_profiles(self):
         return np.round(self.beam_profile_data)
 
+    def rescale_images(self, horizontal_scale=1.1):
+        data = skimage.transform.rescale(self.beam_profile_data, scale=(1, 1, horizontal_scale), multichannel=False)
+        shape_corrected_data = data[:, :, :self.beam_profile_data.shape[-1]]
+        return BeamProfilesPipeline(shape_corrected_data, color_resolution=self.color_resolution)
