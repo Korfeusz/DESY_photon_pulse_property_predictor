@@ -46,3 +46,7 @@ class BeamProfilesPipeline:
         data = skimage.transform.rescale(self.beam_profile_data, scale=(1, 1, horizontal_scale), multichannel=False)
         shape_corrected_data = data[:, :, :self.beam_profile_data.shape[-1]]
         return BeamProfilesPipeline(shape_corrected_data, color_resolution=self.color_resolution)
+
+
+    def shift_to_highest_intensity(self):
+        pass

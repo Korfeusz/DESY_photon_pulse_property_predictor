@@ -44,17 +44,20 @@ def get_center_of_mass(image):
     return np.array(scipy.ndimage.measurements.center_of_mass(image)).astype(np.int)
 
 
-def get_shift_values(image):
+def get_shift_to_com_values(image):
     y_center_of_mass, x_center_of_mass = get_center_of_mass(image)
     y_geometric, x_geometric = get_geometric_center(image)
     return x_geometric - x_center_of_mass, -(y_geometric - y_center_of_mass)
 
 
 def shift_com_to_geometric_single_image(image):
-    horizontal, vertical = get_shift_values(image)
+    horizontal, vertical = get_shift_to_com_values(image)
     return shift_by_values(image, horizontal=horizontal, vertical=vertical)
 
 
 def shift_com_to_geometric(data):
     return np.array(list(map(shift_com_to_geometric_single_image, data)))
 
+
+def shift_highest_intensity_to_geometric(data):
+    pass

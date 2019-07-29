@@ -1,18 +1,17 @@
 import file_tools
-import beam_profile_imaging
 from circle_finding_tools import is_circle_in_center_of_images
 import time
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
-    image_number = 74
+    image_number = 38
     profiles_range = (0, 100)
     h_min, h_max, v_min, v_max = 105, 364, 90, 349
     # h_min, h_max, v_min, v_max = 0, 483, 0, 360
     final_color_resolution = 63
 
-    with file_tools.get_run(run_number=1) as current_run:
+    with file_tools.get_run(run_number=3) as current_run:
         beam_profiles = file_tools\
             .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
             .slice_horizontally(h_min=h_min, h_max=h_max)\
@@ -31,10 +30,11 @@ if __name__ == '__main__':
             .change_color_resolution(new_resolution=4095)\
             .get_rounded_beam_profiles()
 
-        beam_profile_imaging.save_beam_profile_image(beam_profiles[image_number, :, :], name='final_profile.png')
-        beam_profile_imaging.save_beam_profile_image(beam_profiles_raw[image_number, :, :], name='input_profile.png')
+        plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
+        plt.show()
+        plt.imshow(beam_profiles_raw[image_number, :, :], cmap=plt.cm.jet)
+        plt.show()
         print(beam_profiles.shape)
-
         t = time.time()
         labels = is_circle_in_center_of_images(beam_profiles, ring_thickness=30, number_of_tests=2,
                                                relative_tolerance=1e-1,

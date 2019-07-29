@@ -1,12 +1,12 @@
 import numpy as np
-import matplotlib.pyplot as plt
+
 
 def is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=2, relative_tolerance=1e-5, additive_tolerance=1e-8):
     r_total = get_mask_radii(data)
     r_outer = r_total
     old_test_result = np.ones(shape=data.shape[0]).astype(np.bool)
     for test_no in range(number_of_tests):
-        r_outer = r_outer - test_no * ring_thickness
+        r_outer = r_outer - (test_no + 1) * ring_thickness
         r_inner = r_outer - ring_thickness
         test_result = test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance, additive_tolerance)
         test_result = test_result & old_test_result
@@ -33,7 +33,6 @@ def calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_to
 def calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, r_inner, r_outer):
     dist_mat = create_matrix_of_distances_from_center(data[0, :, :])
     ring_masks = create_ring_mask(r_inner, r_outer, dist_mat)
-    plt.imsave('ring_test.png', ring_masks[2, :, :])
     with np.errstate(divide='ignore', invalid='ignore'):
         return count_non_zero_points_under_mask(data, ring_masks) / count_all_non_zero_points(data)
 
