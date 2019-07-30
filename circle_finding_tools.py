@@ -1,28 +1,39 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=2, relative_tolerance=1e-5, additive_tolerance=1e-8):
     r_total = get_mask_radii(data)
     r_outer = r_total
     old_test_result = np.ones(shape=data.shape[0]).astype(np.bool)
+    circularity_index = 0
     for test_no in range(number_of_tests):
         r_outer = r_outer - (test_no + 1) * ring_thickness
         r_inner = r_outer - ring_thickness
-        test_result = test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance, additive_tolerance)
+        experimental_ratio, expected_ratio = get_ribbon_ratios(data, r_outer, r_inner, r_total)
+        test_result = test_ribbon_ratios_for_circularity(experimental_ratio, expected_ratio, relative_tolerance, additive_tolerance)
         test_result = test_result & old_test_result
         old_test_result = test_result
-    return test_result
+        circularity_index += get_circularity_index(experimental_ratio, expected_ratio)
+    circularity_index /= number_of_tests
+    return test_result, circularity_index
 
 
-def test_ribbon_ratios_for_circularity(data, r_outer, r_inner, r_total, relative_tolerance, additive_tolerance):
-    experimental_ratio = calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, r_inner, r_outer)
-    expected_ratio = calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total)
-    # print('expected: {}, got: {}'.format(expected_ratio, experimental_ratio))
-    #TODO find a better isclose method that takes into account the moving floating point
+def test_ribbon_ratios_for_circularity(experimental_ratio, expected_ratio, relative_tolerance, additive_tolerance):
     return np.isclose(experimental_ratio,
                       expected_ratio,
                       rtol=relative_tolerance,
                       atol=additive_tolerance)
+
+
+def get_ribbon_ratios(data, r_outer, r_inner, r_total):
+    experimental_ratio = calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, r_inner, r_outer)
+    expected_ratio = calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total)
+    return experimental_ratio, expected_ratio
+
+
+def get_circularity_index(experimental_ratio, expected_ratio):
+    return np.abs(1 - np.abs(experimental_ratio / expected_ratio))
 
 
 def calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_total):
@@ -33,6 +44,8 @@ def calculate_expected_ratio_inside_ribbon_to_entire_disk(r_inner, r_outer, r_to
 def calculate_experimental_ratio_inside_ribbon_to_entire_disk(data, r_inner, r_outer):
     dist_mat = create_matrix_of_distances_from_center(data[0, :, :])
     ring_masks = create_ring_mask(r_inner, r_outer, dist_mat)
+    # plt.imshow(ring_masks[78, :, :])
+    # plt.show()
     with np.errstate(divide='ignore', invalid='ignore'):
         return count_non_zero_points_under_mask(data, ring_masks) / count_all_non_zero_points(data)
 
