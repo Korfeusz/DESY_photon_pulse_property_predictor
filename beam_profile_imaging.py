@@ -30,6 +30,8 @@ def show_images(images, rows=1, title='test', saveas=None):
     fig.suptitle(title)
     if saveas:
         plt.savefig(saveas)
+    else:
+        plt.show()
     plt.close()
 
 
