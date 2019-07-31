@@ -33,7 +33,8 @@ def convert_values_to_initial_resolution(values, initial_color_resolution, proce
 
 def subtract_background(data, converted_highest_background_values):
     flat_shape = get_flattened_shape(data)
-    return np.reshape([x - y for x, y in zip(np.reshape(data, flat_shape), converted_highest_background_values)], data.shape)
+    return np.reshape([x - y for x, y in zip(np.reshape(data, flat_shape), converted_highest_background_values)],
+                      data.shape)
 
 
 def grayscale_opening(data):
@@ -53,3 +54,5 @@ def remove_background(data, initial_color_resolution, processing_color_resolutio
     data = subtract_background(data, converted_highest_background_values=converted_highest_background_values)
     data = put_zeros_under_mask(data, mask)
     return data
+
+

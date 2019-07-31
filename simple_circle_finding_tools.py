@@ -1,22 +1,28 @@
 import numpy as np
-import skimage.measure
+import skimage.measure, skimage.filters
 import matplotlib.pyplot as plt
 
-def get_distance_from_perfect_circle_greyscale(data, binarisation_levels):
-    distance = 0
-    for level in binarisation_levels:
-        binarised_data = binarise(data, level)
+
+def get_circularity_index(data, binarisation_fractions):
+    distance = get_distance_from_perfect_circle_greyscale(data, binarisation_fractions)
+    return distance.mean(axis=0)
+
+
+def get_distance_from_perfect_circle_greyscale(data, binarisation_fractions):
+    distance = np.zeros(shape=data.shape[0])
+    for fraction in binarisation_fractions:
+        binarised_data = binarise_by_fraction(data, fraction)
         # plt.imshow(binarised_data[0, :, :])
         # plt.show()
-        # print(get_distance_from_perfect_circle_binary(binarised_data))
-        distance += get_distance_from_perfect_circle_binary(binarised_data)
-    return distance / len(binarisation_levels)
+        distance = np.vstack((distance, get_distance_from_perfect_circle_binary(binarised_data)))
+    return distance[1:, :]
+
 
 def get_distance_from_perfect_circle_binary(binarised_data):
     perimeters = get_image_perimeters(binarised_data)
     blob_areas = get_blob_areas(binarised_data)
-    experimental_ratio = calculate_experimental_circularity_index(perimeters, blob_areas)
-    return np.abs(1 - experimental_ratio)
+    experimental_index = calculate_experimental_circularity_index(perimeters, blob_areas)
+    return np.abs(1 - experimental_index)
 
 
 def calculate_experimental_circularity_index(image_perimeters, blob_areas):
@@ -31,8 +37,26 @@ def get_blob_areas(data):
     return np.sum(np.sum(data != 0, axis=2), axis=1)
 
 
-def binarise(data, level):
-    return (data > level).astype(np.int)
+def binarise_by_fraction(data, fraction):
+    maxvals = get_max_values_per_image(data)
+    thresholds = get_thresholds(fraction, maxvals)
+    return binarise_by_level(data, thresholds)
+
+
+def binarise_by_level(data, thresholds):
+    return (data > broadcast_thresholds_to_image_shape(thresholds, data.shape[-2:])).astype(np.int)
+
+
+def get_max_values_per_image(data):
+    return data.max(axis=2).max(axis=1)
+
+
+def get_thresholds(fraction, maxvals):
+    return fraction * maxvals
+
+
+def broadcast_thresholds_to_image_shape(levels, image_shape):
+    return np.tensordot(levels, np.ones(image_shape), axes=0)
 
 
 if __name__ == '__main__':
@@ -49,7 +73,7 @@ if __name__ == '__main__':
         return np.meshgrid(x, y)
     size = (219, 219)
     grid = create_grid(np.zeros(size))
-    gauss = two_dim_asymmetric_gaussian_function(grid, 10, 0, 0, 20, 20).reshape(size)
+    gauss = two_dim_asymmetric_gaussian_function(grid, 10, 0, 0, 15, 20).reshape(size)
     # gauss = gauss +  np.random.random(219*219).reshape((219, 219))
     gauss = gauss.round()
     plt.imshow(gauss)
@@ -57,7 +81,7 @@ if __name__ == '__main__':
     data = np.array([gauss, gauss])
 
 
-    print(get_distance_from_perfect_circle_greyscale(data, binarisation_levels=(1, 3, 5)))
+    # print(get_distance_from_perfect_circle_greyscale(data, binarisation_levels=[2]))
     # label_image = skimage.measure.label(data[0, :, :])
     # regions = regionprops = skimage.measure.regionprops(label_image)
     # fig, ax = plt.subplots()
@@ -71,3 +95,11 @@ if __name__ == '__main__':
     #
     #     print((props.area / np.square(props.perimeter)) * 4 * np.pi)
     # plt.show()
+
+    # thr = skimage.filters.threshold_otsu(data)
+    # print(thr)
+    # plt.imshow(binarise(data, thr)[0, :, :])
+    # plt.show()
+
+
+    print(get_circularity_index(data, binarisation_fractions=[0.5, 0.7]))
