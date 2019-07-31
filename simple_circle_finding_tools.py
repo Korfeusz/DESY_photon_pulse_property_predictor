@@ -18,7 +18,7 @@ def get_distance_from_perfect_circle_greyscale(data, binarisation_fractions):
     distance = np.zeros(shape=data.shape[0])
     for fraction in binarisation_fractions:
         binarised_data = binarise_by_fraction(data, fraction)
-        # plt.imshow(binarised_data[0, :, :])
+        # plt.imshow(binarised_data[90, :, :])
         # plt.show()
         distance = np.vstack((distance, get_distance_from_perfect_circle_binary(binarised_data)))
     return distance[1:, :]
@@ -32,7 +32,8 @@ def get_distance_from_perfect_circle_binary(binarised_data):
 
 
 def calculate_experimental_circularity_index(image_perimeters, blob_areas):
-    return 4 * np.pi * blob_areas / np.square(image_perimeters)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        return 4 * np.pi * blob_areas / np.square(image_perimeters)
 
 
 def get_image_perimeters(data):
