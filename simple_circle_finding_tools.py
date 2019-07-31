@@ -3,6 +3,12 @@ import skimage.measure, skimage.filters
 import matplotlib.pyplot as plt
 
 
+def get_position_of_most_circular_images(circularity_indeces, number_of_best):
+    best_positions_unsorted = np.argpartition(circularity_indeces, number_of_best)[:number_of_best]
+    best_values_sorted_indeces = np.argsort(circularity_indeces[best_positions_unsorted])
+    return best_positions_unsorted[best_values_sorted_indeces]
+
+
 def get_circularity_index(data, binarisation_fractions):
     distance = get_distance_from_perfect_circle_greyscale(data, binarisation_fractions)
     return distance.mean(axis=0)
@@ -102,4 +108,8 @@ if __name__ == '__main__':
     # plt.show()
 
 
-    print(get_circularity_index(data, binarisation_fractions=[0.5, 0.7]))
+    # print(get_circularity_index(data, binarisation_fractions=[0.5, 0.7]))
+
+    a = np.array([1, 9, 2, 8, 3, 8, 3, 6, 5, 7, 3, 78, 5, 2, 563, 23])
+    print(get_position_of_most_circular_images(a, 4))
+    print(a[get_position_of_most_circular_images(a, 4)])
