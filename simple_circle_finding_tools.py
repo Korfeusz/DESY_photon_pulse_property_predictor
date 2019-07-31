@@ -1,7 +1,7 @@
 import numpy as np
 import skimage.measure, skimage.filters
 import matplotlib.pyplot as plt
-
+from binarisation_tools import binarise_by_fraction
 
 def get_position_of_most_circular_images(circularity_indeces, number_of_best):
     best_positions_unsorted = np.argpartition(circularity_indeces, number_of_best)[:number_of_best]
@@ -44,26 +44,7 @@ def get_blob_areas(data):
     return np.sum(np.sum(data != 0, axis=2), axis=1)
 
 
-def binarise_by_fraction(data, fraction):
-    maxvals = get_max_values_per_image(data)
-    thresholds = get_thresholds(fraction, maxvals)
-    return binarise_by_level(data, thresholds)
 
-
-def binarise_by_level(data, thresholds):
-    return (data > broadcast_thresholds_to_image_shape(thresholds, data.shape[-2:])).astype(np.int)
-
-
-def get_max_values_per_image(data):
-    return data.max(axis=2).max(axis=1)
-
-
-def get_thresholds(fraction, maxvals):
-    return fraction * maxvals
-
-
-def broadcast_thresholds_to_image_shape(levels, image_shape):
-    return np.tensordot(levels, np.ones(image_shape), axes=0)
 
 
 if __name__ == '__main__':
@@ -109,7 +90,7 @@ if __name__ == '__main__':
     # plt.show()
 
 
-    # print(get_circularity_index(data, binarisation_fractions=[0.5, 0.7]))
+    print(get_circularity_index(data, binarisation_fractions=[0.5, 0.7]))
 
     a = np.array([1, 9, 2, 8, 3, 8, 3, 6, 5, 7, 3, 78, 5, 2, 563, 23])
     print(get_position_of_most_circular_images(a, 4))

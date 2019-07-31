@@ -24,6 +24,11 @@ class BeamProfilesPipeline:
         color_resolution = new_resolution
         return BeamProfilesPipeline(data, color_resolution)
 
+    def alternative_remove_background(self, cut_off_level):
+        return BeamProfilesPipeline(background_remove_tools.alternative_remove_background(self.beam_profile_data,
+                                                                                          cut_off_level),
+                                    self.color_resolution)
+
     def remove_background(self, number_of_lowest_colors=2, masking_color_resolution=7):
         data = background_remove_tools.remove_background(self.beam_profile_data,
                                                          initial_color_resolution=self.color_resolution,
