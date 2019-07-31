@@ -7,8 +7,8 @@ from simple_circle_finding_tools import get_position_of_most_circular_images, ge
 import beam_profile_imaging
 
 if __name__ == '__main__':
-    image_number = 1908
-    profiles_range = False  # (2000, 2100)
+    image_number = 90
+    profiles_range = (0, 100)
     h_min, h_max, v_min, v_max = 105, 364, 90, 349
     # h_min, h_max, v_min, v_max = 0, 483, 0, 360
     final_color_resolution = 63
@@ -19,23 +19,10 @@ if __name__ == '__main__':
             .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
             .slice_horizontally(h_min=h_min, h_max=h_max) \
             .slice_vertically(v_min=v_min, v_max=v_max) \
-            .alternative_remove_background(cut_off_level=0.65)\
-            .opening() \
-            .rescale_images(horizontal_scale=1.2) \
-            .shift_to_center_of_mass() \
-            .change_color_resolution(new_resolution=final_color_resolution) \
-            .get_rounded_beam_profiles()
-        print(time.time() - t)
-
-        t = time.time()
-        beam_profiles_old = file_tools \
-            .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
-            .slice_horizontally(h_min=h_min, h_max=h_max) \
-            .slice_vertically(v_min=v_min, v_max=v_max) \
             .remove_background(number_of_lowest_colors=5, masking_color_resolution=15) \
             .opening() \
             .rescale_images(horizontal_scale=1.2) \
-            .shift_to_center_of_mass() \
+            .shift_to_highest_intensity(fraction=0.8) \
             .change_color_resolution(new_resolution=final_color_resolution) \
             .get_rounded_beam_profiles()
         print(time.time() - t)
@@ -52,8 +39,7 @@ if __name__ == '__main__':
         plt.show()
         plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
         plt.show()
-        plt.imshow(beam_profiles_old[image_number, :, :], cmap=plt.cm.jet)
-        plt.show()
+
 
 
         # print('\nFinding circles: Method 1')
