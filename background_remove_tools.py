@@ -1,6 +1,6 @@
 import numpy as np
 from skimage import morphology
-
+import binarisation_tools
 
 def change_color_resolution(data, new_resolution, old_resolution):
     return data / old_resolution * new_resolution
@@ -56,3 +56,12 @@ def remove_background(data, initial_color_resolution, processing_color_resolutio
     return data
 
 
+def alternative_remove_background(data, intensity_fraction):
+    maxvals = binarisation_tools.get_max_values_per_image(data)
+    thresholds = binarisation_tools.get_thresholds(intensity_fraction, maxvals)
+
+    broadcast_thresholds = binarisation_tools.broadcast_thresholds_to_image_shape(thresholds, data.shape[-2:])
+    mask = binarisation_tools.binarise_by_level(data, broadcast_thresholds)
+    data = data - broadcast_thresholds
+    data[~mask] = 0.
+    return data

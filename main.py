@@ -7,14 +7,28 @@ from simple_circle_finding_tools import get_position_of_most_circular_images, ge
 import beam_profile_imaging
 
 if __name__ == '__main__':
-    image_number = 90
+    image_number = 1908
     profiles_range = False  # (2000, 2100)
     h_min, h_max, v_min, v_max = 105, 364, 90, 349
     # h_min, h_max, v_min, v_max = 0, 483, 0, 360
     final_color_resolution = 63
-
+    # .remove_background(number_of_lowest_colors=5, masking_color_resolution=15) \
     with file_tools.get_run(run_number=3) as current_run:
+        t = time.time()
         beam_profiles = file_tools \
+            .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
+            .slice_horizontally(h_min=h_min, h_max=h_max) \
+            .slice_vertically(v_min=v_min, v_max=v_max) \
+            .alternative_remove_background(cut_off_level=0.65)\
+            .opening() \
+            .rescale_images(horizontal_scale=1.2) \
+            .shift_to_center_of_mass() \
+            .change_color_resolution(new_resolution=final_color_resolution) \
+            .get_rounded_beam_profiles()
+        print(time.time() - t)
+
+        t = time.time()
+        beam_profiles_old = file_tools \
             .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
             .slice_horizontally(h_min=h_min, h_max=h_max) \
             .slice_vertically(v_min=v_min, v_max=v_max) \
@@ -24,6 +38,8 @@ if __name__ == '__main__':
             .shift_to_center_of_mass() \
             .change_color_resolution(new_resolution=final_color_resolution) \
             .get_rounded_beam_profiles()
+        print(time.time() - t)
+
 
         beam_profiles_raw = file_tools \
             .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
@@ -32,35 +48,39 @@ if __name__ == '__main__':
             .change_color_resolution(new_resolution=4095) \
             .get_rounded_beam_profiles()
 
-        # plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
-        # plt.show()
-        # plt.imshow(beam_profiles_raw[image_number, :, :], cmap=plt.cm.jet)
-        # plt.show()
-        print('\nFinding circles: Method 1')
-        t = time.time()
-        labels, circularity_indices = is_circle_in_center_of_images(beam_profiles, ring_thickness=10, number_of_tests=2,
-                                                                    relative_tolerance=1e-3,
-                                                                    additive_tolerance=1e-3)
-        print('Method 1: elapsed:', time.time() - t)
-        smallest_indices = get_position_of_most_circular_images(circularity_indices, number_of_best=100)
-        print('Positions', smallest_indices)
-        beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices], rows=10,
-                                         title='Masking method 100 best',
-                                         saveas='method_1_run_3_100_best.png')
-        # print('Values', circularity_indices[smallest_indices])
+        plt.imshow(beam_profiles_raw[image_number, :, :], cmap=plt.cm.jet)
+        plt.show()
+        plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
+        plt.show()
+        plt.imshow(beam_profiles_old[image_number, :, :], cmap=plt.cm.jet)
+        plt.show()
 
 
-        print('\nFinding circles: Method 2')
-        t = time.time()
-        circularity_indices = get_circularity_index(beam_profiles, binarisation_fractions=[0.3, 0.5])
-        print('Method 2: elapsed:', time.time() - t)
-        smallest_indices = get_position_of_most_circular_images(circularity_indices, number_of_best=100)
-        print('Positions', smallest_indices)
-        beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices], rows=10,
-                                         title='Area over perimeter squared  method 100 best',
-                                         saveas='method_2_run_3_100_best.png')
-        # print('Values', circularity_indices[smallest_indices])
-
+        # print('\nFinding circles: Method 1')
+        # t = time.time()
+        # labels, circularity_indices = is_circle_in_center_of_images(beam_profiles, ring_thickness=10, number_of_tests=2,
+        #                                                             relative_tolerance=1e-3,
+        #                                                             additive_tolerance=1e-3)
+        # print('Method 1: elapsed:', time.time() - t)
+        # smallest_indices_m1 = get_position_of_most_circular_images(circularity_indices, number_of_best=100)
+        # print('Positions', smallest_indices_m1)
+        # beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices_m1], rows=10,
+        #                                  title='Masking method 100 best',
+        #                                  saveas='method_1_run_3_100_best.png')
+        # # print('Values', circularity_indices[smallest_indices])
+        #
+        #
+        # print('\nFinding circles: Method 2')
+        # t = time.time()
+        # circularity_indices = get_circularity_index(beam_profiles, binarisation_fractions=[0.3, 0.5])
+        # print('Method 2: elapsed:', time.time() - t)
+        # smallest_indices_m2 = get_position_of_most_circular_images(circularity_indices, number_of_best=100)
+        # print('Positions', smallest_indices_m2)
+        # beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices_m2], rows=10,
+        #                                  title='Area over perimeter squared  method 100 best',
+        #                                  saveas='method_2_run_3_100_best.png')
+        # # print('Values', circularity_indices[smallest_indices])
+        # print('Found by both: ', np.intersect1d(smallest_indices_m1, smallest_indices_m2))
 
 
 
