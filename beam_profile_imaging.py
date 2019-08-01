@@ -8,14 +8,9 @@ def save_beam_profile_image(beam_profile, name='save_test.png'):
                cmap=plt.cm.jet)
 
 
-# def show_images(images, rows=1):
-#     n_images = len(images)
-#     fig = plt.figure()
-#     for n, image in enumerate(images):
-#         a = fig.add_subplot(rows, np.ceil(n_images / float(rows)), n + 1)
-#         a.axis('off')
-#         plt.imshow(image, cmap=plt.cm.jet)
-#     plt.show()
+def show_beam_profile(beam_profiles, image_number):
+    plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
+    plt.show()
 
 
 def show_images(images, rows=1, title='test', save=False):
@@ -35,7 +30,6 @@ def show_images(images, rows=1, title='test', save=False):
 
 
 if __name__ == '__main__':
-    import beam_profiles_pipeline
     import file_tools
 
     image_number = 38
@@ -60,5 +54,5 @@ if __name__ == '__main__':
                 beam_profiles_print = beam_profiles_raw[low_bound:(low_bound + 100), :, :]
                 title = 'Run: {}, Profiles num: {}:{}'.format(run_number, low_bound, (low_bound + 100))
                 savetitle = 'images/run_{}_profiles_{}_{}.png'.format(run_number, low_bound, (low_bound + 100))
-                show_images(beam_profiles_print, rows=10, title=title, saveas=savetitle)
+                show_images(beam_profiles_print, rows=10, title=title)
 

@@ -1,9 +1,9 @@
 import file_tools
-from circle_finding_tools import is_circle_in_center_of_images
+from masking_method_circle_finding_tool import is_circle_in_center_of_images
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from simple_circle_finding_tools import get_position_of_most_circular_images, get_circularity_index
+from area_perimeter_circle_finding_tool import get_position_of_most_circular_images, get_circularity_index
 import beam_profile_imaging
 
 if __name__ == '__main__':
@@ -13,7 +13,6 @@ if __name__ == '__main__':
     # h_min, h_max, v_min, v_max = 0, 483, 0, 360
     final_color_resolution = 63
     with file_tools.get_run(run_number=3) as current_run:
-        t = time.time()
         beam_profiles = file_tools \
             .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
             .slice_horizontally(h_min=h_min, h_max=h_max) \
@@ -24,8 +23,6 @@ if __name__ == '__main__':
             .shift_to_highest_intensity(fraction=0.8) \
             .change_color_resolution(new_resolution=final_color_resolution) \
             .get_rounded_beam_profiles()
-        print(time.time() - t)
-
 
         beam_profiles_raw = file_tools \
             .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=profiles_range) \
@@ -34,18 +31,13 @@ if __name__ == '__main__':
             .change_color_resolution(new_resolution=4095) \
             .get_rounded_beam_profiles()
 
-        plt.imshow(beam_profiles_raw[image_number, :, :], cmap=plt.cm.jet)
-        plt.show()
-        plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
-        plt.show()
-
+        beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
+        beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
 
 
     print('\nFinding circles: Method 1')
     t = time.time()
-    labels, circularity_indices_m1 = is_circle_in_center_of_images(beam_profiles, ring_thickness=10, number_of_tests=2,
-                                                                relative_tolerance=1e-3,
-                                                                additive_tolerance=1e-3)
+    circularity_indices_m1 = is_circle_in_center_of_images(beam_profiles, ring_thickness=10, number_of_tests=2)
     print(circularity_indices_m1[:20])
     print('Method 1: elapsed:', time.time() - t)
     smallest_indices_m1 = get_position_of_most_circular_images(circularity_indices_m1, number_of_best=10)
