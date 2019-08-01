@@ -7,16 +7,16 @@ def binarise_by_fraction(data, fraction):
     return binarise_by_level(data, broadcast_thresholds_to_image_shape(thresholds,  data.shape[-2:]))
 
 
-def binarise_by_level(data, broadcast_thresholds):
-    return (data > broadcast_thresholds)
-
-
 def get_max_values_per_image(data):
     return data.max(axis=2).max(axis=1)
 
 
 def get_thresholds(fraction, maxvals):
     return fraction * maxvals
+
+
+def binarise_by_level(data, broadcast_thresholds):
+    return data > broadcast_thresholds
 
 
 def broadcast_thresholds_to_image_shape(levels, image_shape):

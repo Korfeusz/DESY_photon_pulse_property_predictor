@@ -32,13 +32,6 @@ class BeamProfilesPipeline:
         data = image_manipulation_tools.remove_background_by_intensity_fraction(self.beam_profile_data, cut_off_level)
         return BeamProfilesPipeline(data, self.color_resolution)
 
-    def remove_background(self, number_of_lowest_colors=2, masking_color_resolution=7):
-        data = image_manipulation_tools.remove_background(self.beam_profile_data,
-                                                          initial_color_resolution=self.color_resolution,
-                                                          processing_color_resolution=masking_color_resolution,
-                                                          number_of_lowest_to_cut=number_of_lowest_colors)
-        return BeamProfilesPipeline(data, self.color_resolution)
-
     def opening(self):
         data = image_manipulation_tools.grayscale_opening(self.beam_profile_data)
         return BeamProfilesPipeline(data, self.color_resolution)

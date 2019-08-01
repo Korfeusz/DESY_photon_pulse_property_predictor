@@ -73,7 +73,7 @@ def get_circularity_index(experimental_ratio, expected_ratio):
 
 
 if __name__ == '__main__':
-    from gaussian_fit_tools import two_dim_asymmetric_gaussian_function
+    from tools import two_dim_asymmetric_gaussian_function
     import matplotlib.pyplot as plt
 
     grid = create_grid(np.zeros((219, 219)))
