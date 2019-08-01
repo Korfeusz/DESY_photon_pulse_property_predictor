@@ -1,7 +1,7 @@
 import numpy as np
 import skimage.measure, skimage.filters
-import matplotlib.pyplot as plt
 from binarisation_tools import binarise_by_fraction
+
 
 def get_position_of_most_circular_images(circularity_indeces, number_of_best):
     best_positions_unsorted = np.argpartition(circularity_indeces, number_of_best)[:number_of_best]
@@ -18,8 +18,6 @@ def get_distance_from_perfect_circle_greyscale(data, binarisation_fractions):
     distance = np.zeros(shape=data.shape[0])
     for fraction in binarisation_fractions:
         binarised_data = binarise_by_fraction(data, fraction)
-        # plt.imshow(binarised_data[90, :, :])
-        # plt.show()
         distance = np.vstack((distance, get_distance_from_perfect_circle_binary(binarised_data)))
     return distance[1:, :]
 
