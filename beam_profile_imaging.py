@@ -18,7 +18,7 @@ def save_beam_profile_image(beam_profile, name='save_test.png'):
 #     plt.show()
 
 
-def show_images(images, rows=1, title='test', saveas=None):
+def show_images(images, rows=1, title='test', save=False):
     n_images = len(images)
     fig = plt.figure()
     for n, image in enumerate(images):
@@ -28,10 +28,9 @@ def show_images(images, rows=1, title='test', saveas=None):
             a.set_title(str(n), loc='left')
         plt.imshow(image, cmap=plt.cm.jet)
     fig.suptitle(title)
-    if saveas:
-        plt.savefig(saveas)
-    else:
-        plt.show()
+    if save:
+        plt.savefig('{}.png'.format(title))
+    plt.show()
     plt.close()
 
 
