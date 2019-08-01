@@ -2,7 +2,7 @@ import time
 
 import constants
 import numpy as np
-import background_remove_tools
+import image_manipulation_tools
 import image_shifting
 import skimage
 
@@ -27,29 +27,29 @@ class BeamProfilesPipeline:
 
     def change_color_resolution(self, new_resolution):
         # t = time.time()
-        data = background_remove_tools.change_color_resolution(self.beam_profile_data,
-                                                               new_resolution,
-                                                               self.color_resolution)
+        data = image_manipulation_tools.change_color_resolution(self.beam_profile_data,
+                                                                new_resolution,
+                                                                self.color_resolution)
         color_resolution = new_resolution
         # print('Changing color resolution time: {}'.format(time.time() - t))
         return BeamProfilesPipeline(data, color_resolution)
 
     def remove_background_by_intensity_fraction(self, cut_off_level):
         # t = time.time()
-        data = background_remove_tools.remove_background_by_intensity_fraction(self.beam_profile_data, cut_off_level)
+        data = image_manipulation_tools.remove_background_by_intensity_fraction(self.beam_profile_data, cut_off_level)
         # print('Background remove timing: {}'.format(time.time() - t))
         return BeamProfilesPipeline(data, self.color_resolution)
 
     def remove_background(self, number_of_lowest_colors=2, masking_color_resolution=7):
-        data = background_remove_tools.remove_background(self.beam_profile_data,
-                                                         initial_color_resolution=self.color_resolution,
-                                                         processing_color_resolution=masking_color_resolution,
-                                                         number_of_lowest_to_cut=number_of_lowest_colors)
+        data = image_manipulation_tools.remove_background(self.beam_profile_data,
+                                                          initial_color_resolution=self.color_resolution,
+                                                          processing_color_resolution=masking_color_resolution,
+                                                          number_of_lowest_to_cut=number_of_lowest_colors)
         return BeamProfilesPipeline(data, self.color_resolution)
 
     def opening(self):
         # t = time.time()
-        data = background_remove_tools.grayscale_opening(self.beam_profile_data)
+        data = image_manipulation_tools.grayscale_opening(self.beam_profile_data)
         # print('Opening timing: {}'.format(time.time() - t))
         return BeamProfilesPipeline(data, self.color_resolution)
 
