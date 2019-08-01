@@ -37,7 +37,7 @@ def calculate_experimental_circularity_index(image_perimeters, blob_areas):
 
 
 if __name__ == '__main__':
-    from gaussian_fit_tools import two_dim_asymmetric_gaussian_function
+    from tools import two_dim_asymmetric_gaussian_function
     import matplotlib.pyplot as plt
 
 
