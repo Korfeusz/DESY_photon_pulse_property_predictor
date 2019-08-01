@@ -3,7 +3,8 @@ from masking_method_circle_finding_tool import is_circle_in_center_of_images
 import time
 import numpy as np
 import matplotlib.pyplot as plt
-from area_perimeter_circle_finding_tool import get_position_of_most_circular_images, get_circularity_index
+from area_perimeter_circle_finding_tool import get_circularity_index
+from gaussian_fit_tools import get_n_highest_values
 import beam_profile_imaging
 
 if __name__ == '__main__':
@@ -40,7 +41,7 @@ if __name__ == '__main__':
     circularity_indices_m1 = is_circle_in_center_of_images(beam_profiles, ring_thickness=10, number_of_tests=2)
     print(circularity_indices_m1[:20])
     print('Method 1: elapsed:', time.time() - t)
-    smallest_indices_m1 = get_position_of_most_circular_images(circularity_indices_m1, number_of_best=10)
+    smallest_indices_m1 = get_n_highest_values(circularity_indices_m1, number_of_best=10)
     print('Positions', smallest_indices_m1)
     beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices_m1], rows=5,
                                      title='masking_method_10_best')
@@ -52,7 +53,7 @@ if __name__ == '__main__':
     circularity_indices_m2 = get_circularity_index(beam_profiles, binarisation_fractions=[0.3, 0.5])
     print(circularity_indices_m2[:20])
     print('Method 2: elapsed:', time.time() - t)
-    smallest_indices_m2 = get_position_of_most_circular_images(circularity_indices_m2, number_of_best=10)
+    smallest_indices_m2 = get_n_highest_values(circularity_indices_m2, number_of_best=10)
     print('Positions', smallest_indices_m2)
     beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices_m2], rows=5,
                                      title='method_2_run_3_10_best_3_5')
