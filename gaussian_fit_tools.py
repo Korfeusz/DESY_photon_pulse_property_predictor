@@ -2,6 +2,12 @@ import numpy as np
 import scipy.optimize as opt
 
 
+def get_n_highest_values(circularity_indeces, number_of_best):
+    best_positions_unsorted = np.argpartition(circularity_indeces, number_of_best)[:number_of_best]
+    best_values_sorted_indeces = np.argsort(circularity_indeces[best_positions_unsorted])
+    return best_positions_unsorted[best_values_sorted_indeces]
+
+
 def two_dim_symmetric_gaussian_function(grid, amplitude, mu_x, mu_y, sigma):
     x, y = grid
     mu_x = float(mu_x)
