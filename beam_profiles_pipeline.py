@@ -34,9 +34,9 @@ class BeamProfilesPipeline:
         # print('Changing color resolution time: {}'.format(time.time() - t))
         return BeamProfilesPipeline(data, color_resolution)
 
-    def alternative_remove_background(self, cut_off_level):
+    def remove_background_by_intensity_fraction(self, cut_off_level):
         # t = time.time()
-        data = background_remove_tools.alternative_remove_background(self.beam_profile_data, cut_off_level)
+        data = background_remove_tools.remove_background_by_intensity_fraction(self.beam_profile_data, cut_off_level)
         # print('Background remove timing: {}'.format(time.time() - t))
         return BeamProfilesPipeline(data, self.color_resolution)
 
@@ -72,3 +72,7 @@ class BeamProfilesPipeline:
     def shift_to_highest_intensity(self, fraction):
         data = image_shifting.shift_highest_intensity_to_geometric(self.beam_profile_data, fraction=fraction)
         return BeamProfilesPipeline(data, self.color_resolution)
+
+
+    def standardize(self):
+        pass

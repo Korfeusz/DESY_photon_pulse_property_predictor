@@ -56,7 +56,7 @@ def remove_background(data, initial_color_resolution, processing_color_resolutio
     return data
 
 
-def alternative_remove_background(data, intensity_fraction):
+def remove_background_by_intensity_fraction(data, intensity_fraction):
     maxvals = binarisation_tools.get_max_values_per_image(data)
     thresholds = binarisation_tools.get_thresholds(intensity_fraction, maxvals)
 
