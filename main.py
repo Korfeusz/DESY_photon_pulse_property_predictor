@@ -2,7 +2,6 @@ import file_tools
 from masking_method_circle_finding_tool import is_circle_in_center_of_images
 import time
 import numpy as np
-import matplotlib.pyplot as plt
 from area_perimeter_circle_finding_tool import get_circularity_index
 from tools import get_n_highest_values
 import beam_profile_imaging
@@ -11,7 +10,6 @@ if __name__ == '__main__':
     image_number = 90
     profiles_range = (2400, 2500)
     h_min, h_max, v_min, v_max = 105, 364, 90, 349
-    # h_min, h_max, v_min, v_max = 0, 483, 0, 360
     final_color_resolution = 63
     with file_tools.get_run(run_number=3) as current_run:
         beam_profiles = file_tools \
