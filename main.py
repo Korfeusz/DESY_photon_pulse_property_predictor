@@ -1,4 +1,3 @@
-import file_tools
 from masking_method_circle_finding_tool import is_circle_in_center_of_images
 import time
 import numpy as np
@@ -7,15 +6,34 @@ from tools import get_n_highest_values
 import beam_profile_imaging
 import beam_profiles_import_tool
 import json_tools
+from beam_profile_metadata_writer import BeamProfileMetadataWriter
+import json
+
 
 if __name__ == '__main__':
-    image_number = 90
+    image_number = 2
     run_input = json_tools.import_json_as_dict('run_input.json')
+    beam_profiles_import_tool.store_run_input_in_json(run_inputs_file='run_inputs.json', run_input=run_input, indent=2)
     beam_profiles = beam_profiles_import_tool.get_beam_profiles_from_dict(run_input)
     beam_profiles_raw = beam_profiles_import_tool.get_raw_beam_profiles_from_dict(run_input)
     beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
     beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
 
+
+
+
+    json_beam_metadata = 'test.json'
+    beam_profile_metadata_dict = json_tools.import_json_as_dict(json_beam_metadata)
+    metadata = BeamProfileMetadataWriter(beam_profiles, run_input, beam_profile_metadata_dict)\
+        .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5]) \
+        .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
+        .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
+        .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
+        .add_beam_profiles_addresses() \
+        .beam_profile_metadata_dict
+
+    with open(json_beam_metadata, 'w') as f:
+        json.dump(metadata, f, indent=2)
     # print('\nFinding circles: Method 1')
     # t = time.time()
     # circularity_indices_m1 = is_circle_in_center_of_images(beam_profiles, ring_thickness=20, number_of_tests=2)
@@ -38,8 +56,8 @@ if __name__ == '__main__':
     #                                  title='method_2_run_3_100_best_2_3_5')
     # # print('Values', circularity_indices[smallest_indices])
     # print('Found by both: ', np.intersect1d(smallest_indices_m1, smallest_indices_m2))
-
-
+    #
+    #
     # average_score = np.mean([circularity_indices_m1, circularity_indices_m2], axis=0)
     # smallest_average_indices = get_position_of_most_circular_images(average_score, number_of_best=100)
     # beam_profile_imaging.show_images(beam_profiles_raw[smallest_average_indices], rows=5,

@@ -40,3 +40,10 @@ def get_beam_profiles_from_json(filename):
 def get_raw_beam_profiles_from_json(filename):
     run_input = json_tools.import_json_as_dict(filename)
     return get_raw_beam_profiles_from_dict(run_input)
+
+
+def store_run_input_in_json(run_inputs_file, run_input, indent):
+    run_inputs_dict = json_tools.import_json_as_dict(run_inputs_file)
+    run_inputs_dict.setdefault(run_input['experiment_name'], {})
+    run_inputs_dict[run_input['experiment_name']] = run_input
+    json_tools.dump_dict_to_json(run_inputs_file, run_inputs_dict, indent)
