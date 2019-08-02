@@ -5,7 +5,7 @@ import numpy as np
 from area_perimeter_circle_finding_tool import get_circularity_index
 from tools import get_n_highest_values
 import beam_profile_imaging
-
+import beam_profiles_import_tool
 run_input = {
     'profiles_range': (0, 100),
     'slice': {
@@ -27,28 +27,10 @@ run_input = {
 }
 if __name__ == '__main__':
     image_number = 90
-    h_min, h_max, v_min, v_max = 105, 364, 90, 349
-    final_color_resolution = 63
-    with file_tools.get_run(run_number=run_input['run_number']) as current_run:
-        beam_profiles = file_tools \
-            .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=run_input['profiles_range']) \
-            .slice_horizontally(h_min=run_input['slice']['horizontal']['min'], h_max=run_input['slice']['horizontal']['max']) \
-            .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max']) \
-            .remove_background_by_intensity_fraction(cut_off_level=run_input['background_cut_off']) \
-            .opening() \
-            .rescale_images(horizontal_scale=run_input['horizontal_scaling_factor']) \
-            .shift_to_highest_intensity(fraction=run_input['shifting']['fraction']) \
-            .change_color_resolution(new_resolution=run_input['final_color_resolution']) \
-            .get_rounded_beam_profiles()
-
-        beam_profiles_raw = file_tools \
-            .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=run_input['profiles_range']) \
-            .slice_horizontally(h_min=h_min, h_max=h_max) \
-            .slice_vertically(v_min=v_min, v_max=v_max) \
-            .get_rounded_beam_profiles()
-
-        beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
-        beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
+    beam_profiles = beam_profiles_import_tool.get_beam_profiles_from_dict(run_input)
+    beam_profiles_raw = beam_profiles_import_tool.get_raw_beam_profiles_from_dict(run_input)
+    beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
+    beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
 
     # print('\nFinding circles: Method 1')
     # t = time.time()
