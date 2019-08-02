@@ -1,4 +1,5 @@
 import file_tools
+import json_tools
 
 
 def get_beam_profiles_from_dict(run_input):
@@ -29,3 +30,13 @@ def get_raw_beam_profiles_from_dict(run_input):
                                 h_max=run_input['slice']['horizontal']['max']) \
             .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max']) \
             .get_rounded_beam_profiles()
+
+
+def get_beam_profiles_from_json(filename):
+    run_input = json_tools.import_json_as_dict(filename)
+    return get_beam_profiles_from_dict(run_input)
+
+
+def get_raw_beam_profiles_from_json(filename):
+    run_input = json_tools.import_json_as_dict(filename)
+    return get_raw_beam_profiles_from_dict(run_input)
