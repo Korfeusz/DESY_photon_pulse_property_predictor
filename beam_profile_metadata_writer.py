@@ -2,6 +2,7 @@ import area_perimeter_circle_finding_tool
 import masking_method_circle_finding_tool
 import json_tools
 
+
 class BeamProfileMetadataWriter:
     def __init__(self, preprocessed_data, run_metadata, beam_profile_metadata_dict):
         self.data = preprocessed_data
@@ -23,26 +24,43 @@ class BeamProfileMetadataWriter:
             entry_inserting_function(i)
         return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
 
+    def get_circle_index_string(self, index_type, binarisation_fraction=None, ring_thickness=None,
+                                number_of_tests=None):
+        if index_type == 'area_perimeter':
+            settings_string = '_'.join([str(x - int(x)).split('.')[1] for x in binarisation_fraction])
+        elif index_type == 'masking':
+            settings_string = '_'.join([str(ring_thickness), str(number_of_tests)])
+        return 'run_name_{}_{}_settings_{}'.format(self.run_metadata['experiment_name'], index_type, settings_string)
+
     def add_area_perimeter_squared_circularity_indices(self, binarisation_fractions):
         def area_perimeter_entry(i):
-            self.get_profile_entry(i).setdefault('circularity_index', []).append({
+            self.get_profile_entry(i).setdefault('circularity_index', {})
+            index_string = self.get_circle_index_string(index_type='area_perimeter',
+                                                        binarisation_fraction=binarisation_fractions)
+            self.get_profile_entry(i)['circularity_index'].setdefault(index_string, {})
+            self.get_profile_entry(i)['circularity_index'][index_string] = {
                 'type': 'area_perimeter',
                 'settings': binarisation_fractions,
                 'pipeline_settings_name': self.run_metadata['experiment_name'],
                 'value': indices[i]
-            })
+            }
         indices = area_perimeter_circle_finding_tool.get_circularity_index(self.data, binarisation_fractions)
         return self.add_value_to_runs(area_perimeter_entry)
 
     def add_masking_method_circularity_indices(self, ring_thickness=20, number_of_tests=2):
         def masking_entry(i):
-            self.get_profile_entry(i).setdefault('circularity_index', []).append({
+            self.get_profile_entry(i).setdefault('circularity_index', {})
+            index_string = self.get_circle_index_string(index_type='masking',
+                                                        ring_thickness=ring_thickness,
+                                                        number_of_tests=number_of_tests)
+            self.get_profile_entry(i)['circularity_index'].setdefault(index_string, {})
+            self.get_profile_entry(i)['circularity_index'][index_string] = {
                 'type': 'masking',
                 'settings': {'ring_thickness': ring_thickness,
                              'number_of_tests': number_of_tests},
                 'pipeline_settings_name': self.run_metadata['experiment_name'],
                 'value': indices[i]
-            })
+            }
 
         indices = masking_method_circle_finding_tool.is_circle_in_center_of_images(self.data,
                                                                                    ring_thickness,
@@ -53,6 +71,7 @@ class BeamProfileMetadataWriter:
         def address_entry(i):
             entry = {'run': self.run_metadata['run_number'], 'profile_number': i}
             self.get_profile_entry(i).setdefault('address', entry)
+
         return self.add_value_to_runs(address_entry)
 
     def add_labels(self):
