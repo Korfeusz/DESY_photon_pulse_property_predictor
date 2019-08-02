@@ -1,6 +1,7 @@
 import area_perimeter_circle_finding_tool
 import masking_method_circle_finding_tool
 import json_tools
+import labeling_tool
 
 
 class BeamProfileMetadataWriter:
@@ -26,11 +27,8 @@ class BeamProfileMetadataWriter:
 
     def get_circle_index_string(self, index_type, binarisation_fraction=None, ring_thickness=None,
                                 number_of_tests=None):
-        if index_type == 'area_perimeter':
-            settings_string = '_'.join([str(x - int(x)).split('.')[1] for x in binarisation_fraction])
-        elif index_type == 'masking':
-            settings_string = '_'.join([str(ring_thickness), str(number_of_tests)])
-        return 'run_name_{}_{}_settings_{}'.format(self.run_metadata['experiment_name'], index_type, settings_string)
+        return labeling_tool.get_circle_index_string(self.run_metadata['experiment_name'],
+                                                     index_type, binarisation_fraction, ring_thickness, number_of_tests)
 
     def add_area_perimeter_squared_circularity_indices(self, binarisation_fractions):
         def area_perimeter_entry(i):
@@ -44,6 +42,7 @@ class BeamProfileMetadataWriter:
                 'pipeline_settings_name': self.run_metadata['experiment_name'],
                 'value': indices[i]
             }
+
         indices = area_perimeter_circle_finding_tool.get_circularity_index(self.data, binarisation_fractions)
         return self.add_value_to_runs(area_perimeter_entry)
 
