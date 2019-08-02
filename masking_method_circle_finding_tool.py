@@ -6,7 +6,7 @@ def is_circle_in_center_of_images(data, ring_thickness=5, number_of_tests=2):
     r_outer = r_total
     circularity_index = 0
     for test_no in range(number_of_tests):
-        r_outer = r_outer - (test_no + 1) * ring_thickness
+        r_outer = r_outer - (test_no) * ring_thickness
         r_inner = r_outer - ring_thickness
         experimental_ratio, expected_ratio = get_ribbon_ratios(data, r_outer, r_inner, r_total)
         circularity_index += get_circularity_index(experimental_ratio, expected_ratio)

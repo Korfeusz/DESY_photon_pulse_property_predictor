@@ -2,7 +2,6 @@ import tensorflow as tf
 import numpy as np
 import time
 import math
-from google.colab import drive
 import json
 
 def one_hot(data, num_classes):
