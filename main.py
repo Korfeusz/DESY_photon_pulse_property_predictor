@@ -6,9 +6,7 @@ from tools import get_n_highest_values
 import beam_profile_imaging
 import beam_profiles_import_tool
 import json_tools
-from beam_profile_metadata_writer import BeamProfileMetadataWriter
-import json
-
+import beam_profile_metadata_tools
 
 if __name__ == '__main__':
     image_number = 2
@@ -19,21 +17,16 @@ if __name__ == '__main__':
     beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
     beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
 
-
-
-
-    json_beam_metadata = 'test.json'
-    beam_profile_metadata_dict = json_tools.import_json_as_dict(json_beam_metadata)
-    metadata = BeamProfileMetadataWriter(beam_profiles, run_input, beam_profile_metadata_dict)\
+    metadata_file = 'metadata.json'
+    beam_profile_metadata_tools.get_metadata_writer(beam_profiles, run_input, metadata_file) \
+        .add_beam_profiles_addresses() \
         .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5]) \
         .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
         .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
         .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
-        .add_beam_profiles_addresses() \
-        .beam_profile_metadata_dict
+        .dump_metadata_to_json(filename=metadata_file, indent=2)
 
-    with open(json_beam_metadata, 'w') as f:
-        json.dump(metadata, f, indent=2)
+
     # print('\nFinding circles: Method 1')
     # t = time.time()
     # circularity_indices_m1 = is_circle_in_center_of_images(beam_profiles, ring_thickness=20, number_of_tests=2)

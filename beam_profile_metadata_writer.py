@@ -1,6 +1,6 @@
 import area_perimeter_circle_finding_tool
 import masking_method_circle_finding_tool
-
+import json_tools
 
 class BeamProfileMetadataWriter:
     def __init__(self, preprocessed_data, run_metadata, beam_profile_metadata_dict):
@@ -61,4 +61,5 @@ class BeamProfileMetadataWriter:
     def add_train_test_split(self):
         pass
 
-
+    def dump_metadata_to_json(self, filename, indent=None):
+        json_tools.dump_dict_to_json(filename, self.beam_profile_metadata_dict, indent=indent)
