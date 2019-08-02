@@ -6,27 +6,11 @@ from area_perimeter_circle_finding_tool import get_circularity_index
 from tools import get_n_highest_values
 import beam_profile_imaging
 import beam_profiles_import_tool
-run_input = {
-    'profiles_range': (0, 100),
-    'slice': {
-        'horizontal': {
-            'min': 105,
-            'max': 364
-        },
-        'vertical': {
-            'min': 90,
-            'max': 349
-        }
-    },
-    'final_color_resolution': 63,
-    'run_number': 3,
-    'background_cut_off': 0.6,
-    'horizontal_scaling_factor': 1.2,
-    'shifting': {'type': 'highest_intensity',
-                 'fraction': 0.8}
-}
+import json_tools
+
 if __name__ == '__main__':
     image_number = 90
+    run_input = json_tools.import_json_as_dict('run_input.json')
     beam_profiles = beam_profiles_import_tool.get_beam_profiles_from_dict(run_input)
     beam_profiles_raw = beam_profiles_import_tool.get_raw_beam_profiles_from_dict(run_input)
     beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
