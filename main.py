@@ -7,6 +7,8 @@ import beam_profile_imaging
 import beam_profiles_import_tool
 import json_tools
 import beam_profile_metadata_tools
+import labeling_tool
+
 
 if __name__ == '__main__':
     image_number = 2
@@ -26,6 +28,10 @@ if __name__ == '__main__':
         .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
         .dump_metadata_to_json(filename=metadata_file, indent=2)
 
+    # metadata_dict = json_tools.import_json_as_dict(metadata_file)
+    # images, indeces = labeling_tool.get_specific_circle_indeces_list(metadata_dict, index_settings=[0.3, 0.5])
+    # print(images)
+    # print(indeces)
 
     # print('\nFinding circles: Method 1')
     # t = time.time()
