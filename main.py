@@ -1,13 +1,10 @@
-from masking_method_circle_finding_tool import is_circle_in_center_of_images
-import time
 import numpy as np
-from area_perimeter_circle_finding_tool import get_circularity_index
 from tools import get_n_highest_values
 import beam_profile_imaging
 import beam_profiles_import_tool
 import json_tools
 import beam_profile_metadata_tools
-import labeling_tool
+import labeling_algo
 
 if __name__ == '__main__':
     image_number = 2
@@ -28,35 +25,28 @@ if __name__ == '__main__':
         .dump_metadata_to_json(filename=metadata_file, indent=2)
 
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
-    images, indeces = labeling_tool.get_specific_circle_indices_list(metadata_dict, run_name='0',
-                                                                     index_type='masking',
-                                                                     settings={'ring_thickness': 10, 'number_of_tests': 2})
-    print(images)
-    print(indeces)
 
-    # print('\nFinding circles: Method 1')
-    # t = time.time()
-    # circularity_indices_m1 = is_circle_in_center_of_images(beam_profiles, ring_thickness=20, number_of_tests=2)
-    # print(circularity_indices_m1[:20])
-    # print('Method 1: elapsed:', time.time() - t)
-    # smallest_indices_m1 = get_n_highest_values(circularity_indices_m1, number_of_best=100)
-    # print('Positions', smallest_indices_m1)
-    # beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices_m1], rows=10,
-    #                                  title='masking_method_100_best_less_rings')
-    # # print('Values', circularity_indices[smallest_indices])
-    #
-    # print('\nFinding circles: Method 2')
-    # t = time.time()
-    # circularity_indices_m2 = get_circularity_index(beam_profiles, binarisation_fractions=[0.2, 0.3, 0.5])
-    # print(circularity_indices_m2[:20])
-    # print('Method 2: elapsed:', time.time() - t)
-    # smallest_indices_m2 = get_n_highest_values(circularity_indices_m2, number_of_best=100)
-    # print('Positions', smallest_indices_m2)
-    # beam_profile_imaging.show_images(beam_profiles_raw[smallest_indices_m2], rows=10,
-    #                                  title='method_2_run_3_100_best_2_3_5')
-    # # print('Values', circularity_indices[smallest_indices])
-    # print('Found by both: ', np.intersect1d(smallest_indices_m1, smallest_indices_m2))
-    #
+    print('\nFinding circles: Method 1')
+    profiles, circularity_indices_m1 = labeling_algo.get_specific_circle_indices_list(metadata_dict, experiment_name='0',
+                                                                                      index_type='masking',
+                                                                                      settings={'ring_thickness': 10,
+                                                                                                'number_of_tests': 2})
+    best_profile_indices = get_n_highest_values(np.array(circularity_indices_m1), number_of_best=10)
+    print('Positions', best_profile_indices)
+    beam_profile_imaging.show_images(beam_profiles_raw[best_profile_indices], rows=5,
+                                     title='masking_method_10_best_less_rings')
+
+    print('\nFinding circles: Method 2')
+    profiles, circularity_indices_m2 = labeling_algo.get_specific_circle_indices_list(metadata_dict, experiment_name='0',
+                                                                                      index_type='area_perimeter',
+                                                                                      settings=[0.3, 0.5])
+    best_profile_indices = get_n_highest_values(np.array(circularity_indices_m2), number_of_best=10)
+    print('Positions', best_profile_indices)
+    beam_profile_imaging.show_images(beam_profiles_raw[best_profile_indices], rows=20,
+                                     title='masking_method_10_best_less_rings')
+
+
+
     #
     # average_score = np.mean([circularity_indices_m1, circularity_indices_m2], axis=0)
     # smallest_average_indices = get_position_of_most_circular_images(average_score, number_of_best=100)
