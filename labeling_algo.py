@@ -64,6 +64,7 @@ def label_by_threshold(metadata_file, experiment_name, index_type, threshold, bi
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=indent)
 
 
+
 if __name__ == '__main__':
     metadata_file = 'metadata.json'
 
