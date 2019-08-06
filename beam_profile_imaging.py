@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import json_tools
+import beam_profile_metadata_tools
+import beam_profiles_import_tool
 
 
 def save_beam_profile_image(beam_profile, name='save_test.png'):
@@ -11,6 +14,36 @@ def save_beam_profile_image(beam_profile, name='save_test.png'):
 def show_beam_profile(beam_profiles, image_number):
     plt.imshow(beam_profiles[image_number, :, :], cmap=plt.cm.jet)
     plt.show()
+
+
+def get_shape_from_experiment(run_input):
+    horizontal = run_input['slice']['horizontal']['max'] - run_input['slice']['horizontal']['min']
+    vertical = run_input['slice']['vertical']['max'] - run_input['slice']['vertical']['min']
+    return vertical, horizontal
+
+
+def get_profiles_length(profiles):
+    shape = np.shape(profiles)
+    if len(shape) == 3:
+        return shape[0]
+    if len(shape) == 2:
+        return 1
+
+
+def get_profiles_from_indices(indices_array, metadata_file, run_inputs_file, experiment_name):
+    metadata_dict = json_tools.import_json_as_dict(metadata_file)
+    address_list = beam_profile_metadata_tools.get_addresses_from_indices(indices_array, metadata_dict)
+    run_input = json_tools.import_json_as_dict(run_inputs_file)[experiment_name]
+    image_shape = get_shape_from_experiment(run_input)
+    images = np.zeros(shape=(len(indices_array), image_shape[0], image_shape[1]))
+    image_index = 0
+    for run_list in address_list:
+        if np.any(run_list):
+            imported_profiles = beam_profiles_import_tool.get_specific_raw_beam_profiles(run_input, run_list)
+            number_of_imported_profiles = get_profiles_length(imported_profiles)
+            images[image_index:(number_of_imported_profiles + image_index)] = imported_profiles
+            image_index += number_of_imported_profiles
+    return images
 
 
 def show_images(images, rows=1, title='test', save=False):
@@ -30,29 +63,8 @@ def show_images(images, rows=1, title='test', save=False):
 
 
 if __name__ == '__main__':
-    import file_tools
-
-    image_number = 38
-    profiles_range = (0, 100)
-    h_min, h_max, v_min, v_max = 105, 364, 90, 349
-    # h_min, h_max, v_min, v_max = 0, 483, 0, 360
-    final_color_resolution = 63
-    run_number = 8
-
-    for run_number in range(9):
-        with file_tools.get_run(run_number=run_number) as current_run:
-            beam_profiles_raw = file_tools \
-                .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=False) \
-                .slice_horizontally(h_min=h_min, h_max=h_max) \
-                .slice_vertically(v_min=v_min, v_max=v_max) \
-                .get_rounded_beam_profiles()
-
-            image_number = beam_profiles_raw.shape[0]
-            for low_bound in range(0, image_number, 100):
-                if low_bound % 1000 == 0:
-                    print(low_bound)
-                beam_profiles_print = beam_profiles_raw[low_bound:(low_bound + 100), :, :]
-                title = 'Run: {}, Profiles num: {}:{}'.format(run_number, low_bound, (low_bound + 100))
-                savetitle = 'images/run_{}_profiles_{}_{}.png'.format(run_number, low_bound, (low_bound + 100))
-                show_images(beam_profiles_print, rows=10, title=title)
-
+    images = get_profiles_from_indices(['3_0', '3_1', '5_2', '5_1', '4_81', '4_2'],
+                                       metadata_file='metadata_total.json',
+                                       run_inputs_file='run_inputs.json',
+                                       experiment_name='0')
+    show_images(images)
