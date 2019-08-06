@@ -1,5 +1,5 @@
 import numpy as np
-from tools import get_n_highest_values
+from tools import get_indices_of_n_lowest_values
 import beam_profile_imaging
 import beam_profiles_import_tool
 import json_tools
