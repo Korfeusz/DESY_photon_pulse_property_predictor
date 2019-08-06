@@ -1,11 +1,11 @@
 import file_tools
 import json_tools
-
+import numpy as np
 
 def get_beam_profiles_from_dict(run_input):
     with file_tools.get_run(run_number=run_input['run_number']) as current_run:
         pipeline = file_tools \
-            .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=run_input['profiles_range']) \
+            .get_beam_profiles_pipeline(current_run=current_run, profiles_list=run_input['profiles_range']) \
             .slice_horizontally(h_min=run_input['slice']['horizontal']['min'],
                                 h_max=run_input['slice']['horizontal']['max']) \
             .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max']) \
@@ -25,11 +25,16 @@ def get_beam_profiles_from_dict(run_input):
 def get_raw_beam_profiles_from_dict(run_input):
     with file_tools.get_run(run_number=run_input['run_number']) as current_run:
         return file_tools \
-            .get_beam_profiles_pipeline(current_run=current_run, clip_to_profiles=run_input['profiles_range']) \
+            .get_beam_profiles_pipeline(current_run=current_run, profiles_list=run_input['profiles_range']) \
             .slice_horizontally(h_min=run_input['slice']['horizontal']['min'],
                                 h_max=run_input['slice']['horizontal']['max']) \
             .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max']) \
             .get_rounded_beam_profiles()
+
+
+def get_specific_raw_beam_profiles(run_input, unsorted_index_list):
+    run_input['profiles_range'] = np.array(unsorted_index_list)[np.argsort(unsorted_index_list)]
+    return get_raw_beam_profiles_from_dict(run_input)
 
 
 def get_beam_profiles_from_json(filename):

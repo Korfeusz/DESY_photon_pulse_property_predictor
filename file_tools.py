@@ -24,11 +24,11 @@ def get_run(run_number=0):
     current_run.close()
 
 
-def get_beam_profiles_pipeline(current_run, clip_to_profiles=False):
+def get_beam_profiles_pipeline(current_run, profiles_list=False):
     if path_constants.MOCK:
         data = np.round(np.random.rand(100, 200, 230) * constants.BEAM_PROFILE_COLOR_RESOLUTION)
     else:
         data = current_run[path_constants.beam_profiles_path]
-        if clip_to_profiles:
-            data = data[clip_to_profiles[0]:clip_to_profiles[1], :, :]
+        if np.any(profiles_list):
+            data = data[profiles_list, :, :]
     return BeamProfilesPipeline(data=data)

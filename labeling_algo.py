@@ -1,4 +1,6 @@
 import json_tools
+import tools
+import numpy as np
 
 
 def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_name,
@@ -64,9 +66,20 @@ def label_by_threshold(metadata_file, experiment_name, index_type, threshold, bi
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=indent)
 
 
+def get_n_worst_labeled_profiles(beam_profiles_metadata_dict, number_to_find, experiment_name, index_type, binarisation_fraction=None,
+                                 ring_thickness=None, number_of_tests=None):
+    beam_profiles_found, circle_indices = get_specific_circle_indices_list(beam_profiles_metadata_dict,
+                                                                           experiment_name,
+                                                                           index_type,
+                                                                           binarisation_fraction=binarisation_fraction,
+                                                                           ring_thickness=ring_thickness,
+                                                                           number_of_tests=number_of_tests)
+    worst_indices = tools.get_indices_of_n_highest_values(np.array(circle_indices), number_to_find)
+    return np.array(beam_profiles_found)[worst_indices], np.array(circle_indices)[worst_indices]
+
 
 if __name__ == '__main__':
-    metadata_file = 'metadata.json'
+    metadata_file = 'metadata_total.json'
 
     label_by_threshold(metadata_file,
                        threshold=0.4,
@@ -108,3 +121,8 @@ if __name__ == '__main__':
                 profile_metadata['label'][label_name]['description'] = label_description
 
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=2)
+
+    metadata_dict = json_tools.import_json_as_dict(metadata_file)
+    worst_profiles, worst_indices = get_n_worst_labeled_profiles(metadata_dict, number_to_find=100, **circle_index_data_2)
+    print(worst_indices)
+    print(worst_profiles)
