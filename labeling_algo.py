@@ -1,4 +1,3 @@
-import numpy as np
 import json_tools
 
 
@@ -82,15 +81,29 @@ if __name__ == '__main__':
                        binarisation_fraction=[0.3, 0.5],
                        indent=2)
 
+    # Create a combined label
+    label_name = 'combined_label_test_name'
+    label_description = 'experimental combined label'
+    circle_index_data_1 = {'experiment_name': '0',
+                           'index_type': 'masking',
+                           'ring_thickness': 10,
+                           'number_of_tests': 2}
+    circle_index_string_1 = get_circle_index_string(**circle_index_data_1)
+    circle_index_data_2 = {'experiment_name': '0',
+                           'index_type': 'area_perimeter',
+                           'binarisation_fraction': [0.3, 0.5]}
+    circle_index_string_2 = get_circle_index_string(**circle_index_data_2)
+    metadata_dict = json_tools.import_json_as_dict(metadata_file)
+    for profile_index, profile_metadata in metadata_dict.items():
+        if 'label' in profile_metadata.keys():
+            if (circle_index_string_1 in profile_metadata['label'].keys()) \
+                    and (circle_index_string_2 in profile_metadata['label'].keys()):
+                label = profile_metadata['label'][circle_index_string_1]['value'] \
+                        or profile_metadata['label'][circle_index_string_2]['value']
+                profile_metadata['label'].setdefault(label_name, {})
+                profile_metadata['label'][label_name].setdefault('value', int)
+                profile_metadata['label'][label_name]['value'] = label
+                profile_metadata['label'][label_name].setdefault('description', str)
+                profile_metadata['label'][label_name]['description'] = label_description
 
-    # # Create a combined label
-    # metadata_dict = json_tools.import_json_as_dict(metadata_file)
-    # for profile_index, profile_metadata in metadata_dict.items():
-    #     if 'label' in profile_metadata.keys():
-    #         if
-
-    circle_index_data = {'experiment_name': '0',
-                         'index_type': 'masking',
-                         'ring_thickness': 10,
-                         'number_of_tests': 2}
-    print(get_circle_index_string(**circle_index_data))
+    json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=2)
