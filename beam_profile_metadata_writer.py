@@ -1,4 +1,5 @@
 import area_perimeter_circle_finding_tool
+import beam_profile_metadata_tools
 import masking_method_circle_finding_tool
 import json_tools
 import labeling_algo
@@ -33,8 +34,8 @@ class BeamProfileMetadataWriter:
 
     def get_circle_index_string(self, index_type, binarisation_fraction=None, ring_thickness=None,
                                 number_of_tests=None):
-        return labeling_algo.get_circle_index_string(self.run_metadata['experiment_name'],
-                                                     index_type, binarisation_fraction, ring_thickness, number_of_tests)
+        return beam_profile_metadata_tools.get_circle_index_string(self.run_metadata['experiment_name'],
+                                                                   index_type, binarisation_fraction, ring_thickness, number_of_tests)
 
     def add_area_perimeter_squared_circularity_indices(self, binarisation_fractions):
         def area_perimeter_entry(i):

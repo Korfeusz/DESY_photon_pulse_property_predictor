@@ -2,6 +2,7 @@ import json_tools
 import tools
 import numpy as np
 import beam_profile_imaging
+import beam_profile_metadata_tools
 
 
 def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_name,
@@ -10,7 +11,7 @@ def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_nam
                                      number_of_tests=None):
     beam_profiles_found = []
     circle_indices = []
-    index_string = get_circle_index_string(experiment_name, index_type, binarisation_fraction, ring_thickness,
+    index_string = beam_profile_metadata_tools.get_circle_index_string(experiment_name, index_type, binarisation_fraction, ring_thickness,
                                            number_of_tests)
 
     for profile_index, profile_metadata in beam_profiles_metadata_dict.items():
@@ -18,15 +19,6 @@ def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_nam
             beam_profiles_found.append(profile_index)
             circle_indices.append(profile_metadata['circularity_index'][index_string]['value'])
     return beam_profiles_found, circle_indices
-
-
-def get_circle_index_string(experiment_name, index_type, binarisation_fraction=None, ring_thickness=None,
-                            number_of_tests=None):
-    if index_type == 'area_perimeter':
-        settings_string = '_'.join([str(x - int(x)).split('.')[1] for x in binarisation_fraction])
-    elif index_type == 'masking':
-        settings_string = '_'.join([str(ring_thickness), str(number_of_tests)])
-    return 'run_name_{}_{}_settings_{}'.format(experiment_name, index_type, settings_string)
 
 
 def get_split_above_and_below_threshold(beam_profiles, circle_indices, threshold):
@@ -49,7 +41,7 @@ def label_by_threshold(metadata_file, experiment_name, index_type, threshold, bi
     above_threshold_m1, below_threshold_m1 = get_split_above_and_below_threshold(profiles,
                                                                                  circularity_indices_m1,
                                                                                  threshold=threshold)
-    index_string = get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
+    index_string = beam_profile_metadata_tools.get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
                                            binarisation_fraction=binarisation_fraction,
                                            ring_thickness=ring_thickness,
                                            number_of_tests=number_of_tests)
@@ -76,7 +68,7 @@ def get_n_worst_label_1_profiles(beam_profiles_metadata_dict, number_to_find, ex
                                                                            binarisation_fraction=binarisation_fraction,
                                                                            ring_thickness=ring_thickness,
                                                                            number_of_tests=number_of_tests)
-    label_name = get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
+    label_name = beam_profile_metadata_tools.get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
                                          binarisation_fraction=binarisation_fraction,
                                          ring_thickness=ring_thickness,
                                          number_of_tests=number_of_tests)
@@ -94,10 +86,10 @@ def get_n_worst_label_1_profiles(beam_profiles_metadata_dict, number_to_find, ex
 
 
 if __name__ == '__main__':
-    metadata_file = 'metadata_total_1.json'
+    metadata_file = 'metadata.json'
 
     label_by_threshold(metadata_file,
-                       threshold=0.105,
+                       threshold=0.1,
                        experiment_name='0',
                        index_type='masking',
                        ring_thickness=20,
@@ -117,11 +109,11 @@ if __name__ == '__main__':
                            'index_type': 'masking',
                            'ring_thickness': 20,
                            'number_of_tests': 2}
-    circle_index_string_1 = get_circle_index_string(**circle_index_data_1)
+    circle_index_string_1 = beam_profile_metadata_tools.get_circle_index_string(**circle_index_data_1)
     circle_index_data_2 = {'experiment_name': '0',
                            'index_type': 'area_perimeter',
                            'binarisation_fraction': [0.3, 0.5, 0.7]}
-    circle_index_string_2 = get_circle_index_string(**circle_index_data_2)
+    circle_index_string_2 = beam_profile_metadata_tools.get_circle_index_string(**circle_index_data_2)
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
     for profile_index, profile_metadata in metadata_dict.items():
         if 'label' in profile_metadata.keys():
@@ -138,12 +130,12 @@ if __name__ == '__main__':
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=2)
 
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
-    worst_profiles, worst_indices = get_n_worst_label_1_profiles(metadata_dict, number_to_find=10,
-                                                                 **circle_index_data_2)
+    worst_profiles, worst_indices = get_n_worst_label_1_profiles(metadata_dict, number_to_find=100,
+                                                                 **circle_index_data_1)
     print(worst_indices)
     print(worst_profiles)
     images = beam_profile_imaging.get_profiles_from_indices(worst_profiles,
                                                             metadata_file=metadata_file,
                                                             run_inputs_file='run_inputs.json',
                                                             experiment_name='0')
-    beam_profile_imaging.show_images(images, rows=5)
+    beam_profile_imaging.show_images(images, rows=10)
