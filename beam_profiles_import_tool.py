@@ -32,8 +32,9 @@ def get_raw_beam_profiles_from_dict(run_input):
             .get_rounded_beam_profiles()
 
 
-def get_specific_raw_beam_profiles(run_input, unsorted_index_list):
+def get_specific_raw_beam_profiles(run_input, unsorted_index_list, run_number):
     run_input['profiles_range'] = np.array(unsorted_index_list)[np.argsort(unsorted_index_list)]
+    run_input['run_number'] = run_number
     return get_raw_beam_profiles_from_dict(run_input)
 
 

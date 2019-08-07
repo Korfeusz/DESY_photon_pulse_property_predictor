@@ -4,11 +4,13 @@ import time
 import math
 import json
 
+
 def one_hot(data, num_classes):
     length = data.shape[0]
     one_hot = np.zeros((length, num_classes))
     one_hot[np.arange(length), data] = 1
     return one_hot
+
 
 def next_batch(remaining_set, training_set, batch_size=64):
     x, y = remaining_set
@@ -24,6 +26,7 @@ def next_batch(remaining_set, training_set, batch_size=64):
     y_rest = y[~mask]
     return (x_batch, y_batch), (x_rest, y_rest)
 
+
 dataset = 'mnist'
 if dataset == 'mnist':
   (x_train, y_train), (x_test, y_test) =  tf.keras.datasets.mnist.load_data()
@@ -34,10 +37,12 @@ y_test_1h = one_hot(y_test, 10)
 x_train_reshaped = np.reshape(x_train, (-1, 28, 28, 1)) / np.max(x_train)
 x_test_reshaped = np.reshape(x_test, (-1, 28, 28, 1)) / np.max(x_test)
 
+
 def make_dropout(layers, dropout_structure):
   for rate, i in zip(dropout_structure['rate'], dropout_structure['layer']):
     layers[i] = tf.nn.dropout(layers[i], rate=rate)
   return layers
+
 
 def get_convolutional_layers(convolution_channels, image_input):
   layers = []
@@ -55,11 +60,13 @@ def get_convolutional_layers(convolution_channels, image_input):
     x = layers[-1]
   return layers
 
+
 def reshape_convolution_output(convolution_channels, convolution_layers):
   num_layers = len(convolution_channels) - 1
   out_im_size = 4*4
   flattened_out = tf.reshape(convolution_layers[-1], [-1, out_im_size* convolution_channels[-1]])
   return flattened_out
+
 
 def get_layers(layer_structure, flat_input, dropout_structure):
   weights = []
