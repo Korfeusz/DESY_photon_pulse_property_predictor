@@ -66,7 +66,8 @@ def label_by_threshold(metadata_file, experiment_name, index_type, threshold, bi
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=indent)
 
 
-def get_n_worst_labeled_profiles(beam_profiles_metadata_dict, number_to_find, experiment_name, index_type, binarisation_fraction=None,
+def get_n_worst_label_1_profiles(beam_profiles_metadata_dict, number_to_find, experiment_name, index_type,
+                                 binarisation_fraction=None,
                                  ring_thickness=None, number_of_tests=None):
     beam_profiles_found, circle_indices = get_specific_circle_indices_list(beam_profiles_metadata_dict,
                                                                            experiment_name,
@@ -74,8 +75,16 @@ def get_n_worst_labeled_profiles(beam_profiles_metadata_dict, number_to_find, ex
                                                                            binarisation_fraction=binarisation_fraction,
                                                                            ring_thickness=ring_thickness,
                                                                            number_of_tests=number_of_tests)
-    worst_indices = tools.get_indices_of_n_highest_values(np.array(circle_indices), number_to_find)
-    return np.array(beam_profiles_found)[worst_indices], np.array(circle_indices)[worst_indices]
+    label_name = get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
+                                         binarisation_fraction=binarisation_fraction,
+                                         ring_thickness=ring_thickness,
+                                         number_of_tests=number_of_tests)
+    indices_of_beam_profiles_labeled_1 = [i for i, p in enumerate(beam_profiles_found) if beam_profiles_metadata_dict[p]['label'][label_name]['value'] == 1]
+    beam_profiles_labeled_1 = np.array(beam_profiles_found)[indices_of_beam_profiles_labeled_1]
+    circle_indices_of_beam_profiles_labeled_1 = np.array(circle_indices)[indices_of_beam_profiles_labeled_1]
+    worst_indices = tools.get_indices_of_n_highest_values(np.array(circle_indices_of_beam_profiles_labeled_1),
+                                                          number_to_find)
+    return beam_profiles_labeled_1[worst_indices], circle_indices_of_beam_profiles_labeled_1[worst_indices]
 
 
 if __name__ == '__main__':
@@ -123,6 +132,7 @@ if __name__ == '__main__':
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=2)
 
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
-    worst_profiles, worst_indices = get_n_worst_labeled_profiles(metadata_dict, number_to_find=100, **circle_index_data_2)
+    worst_profiles, worst_indices = get_n_worst_label_1_profiles(metadata_dict, number_to_find=100,
+                                                                 **circle_index_data_2)
     print(worst_indices)
     print(worst_profiles)
