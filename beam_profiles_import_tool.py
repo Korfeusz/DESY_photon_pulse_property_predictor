@@ -2,6 +2,7 @@ import file_tools
 import json_tools
 import numpy as np
 
+
 def get_beam_profiles_from_dict(run_input):
     with file_tools.get_run(run_number=run_input['run_number']) as current_run:
         pipeline = file_tools \

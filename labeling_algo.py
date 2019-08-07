@@ -1,6 +1,7 @@
 import json_tools
 import tools
 import numpy as np
+import beam_profile_imaging
 
 
 def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_name,
@@ -13,7 +14,7 @@ def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_nam
                                            number_of_tests)
 
     for profile_index, profile_metadata in beam_profiles_metadata_dict.items():
-        if index_string in profile_metadata['circularity_index'].keys():
+        if not profile_metadata['corrupted'] and index_string in profile_metadata['circularity_index'].keys():
             beam_profiles_found.append(profile_index)
             circle_indices.append(profile_metadata['circularity_index'][index_string]['value'])
     return beam_profiles_found, circle_indices
@@ -79,7 +80,12 @@ def get_n_worst_label_1_profiles(beam_profiles_metadata_dict, number_to_find, ex
                                          binarisation_fraction=binarisation_fraction,
                                          ring_thickness=ring_thickness,
                                          number_of_tests=number_of_tests)
-    indices_of_beam_profiles_labeled_1 = [i for i, p in enumerate(beam_profiles_found) if beam_profiles_metadata_dict[p]['label'][label_name]['value'] == 1]
+    indices_of_beam_profiles_labeled_1 = [i for i, p in enumerate(beam_profiles_found) if
+                                          beam_profiles_metadata_dict[p]['label'][label_name]['value'] == 1]
+    print('Number of label 1s found: {}'.format(len(indices_of_beam_profiles_labeled_1)))
+    print('Total number of profiles: {}'.format(len(beam_profiles_found)))
+    if len(indices_of_beam_profiles_labeled_1) < number_to_find:
+        number_to_find = len(indices_of_beam_profiles_labeled_1)
     beam_profiles_labeled_1 = np.array(beam_profiles_found)[indices_of_beam_profiles_labeled_1]
     circle_indices_of_beam_profiles_labeled_1 = np.array(circle_indices)[indices_of_beam_profiles_labeled_1]
     worst_indices = tools.get_indices_of_n_highest_values(np.array(circle_indices_of_beam_profiles_labeled_1),
@@ -88,20 +94,20 @@ def get_n_worst_label_1_profiles(beam_profiles_metadata_dict, number_to_find, ex
 
 
 if __name__ == '__main__':
-    metadata_file = 'metadata_total.json'
+    metadata_file = 'metadata_total_1.json'
 
     label_by_threshold(metadata_file,
-                       threshold=0.4,
+                       threshold=0.105,
                        experiment_name='0',
                        index_type='masking',
                        ring_thickness=20,
                        number_of_tests=2,
                        indent=2)
     label_by_threshold(metadata_file,
-                       threshold=0.2,
+                       threshold=0.46,
                        experiment_name='0',
                        index_type='area_perimeter',
-                       binarisation_fraction=[0.3, 0.5],
+                       binarisation_fraction=[0.3, 0.5, 0.7],
                        indent=2)
 
     # Create a combined label
@@ -109,12 +115,12 @@ if __name__ == '__main__':
     label_description = 'experimental combined label'
     circle_index_data_1 = {'experiment_name': '0',
                            'index_type': 'masking',
-                           'ring_thickness': 10,
+                           'ring_thickness': 20,
                            'number_of_tests': 2}
     circle_index_string_1 = get_circle_index_string(**circle_index_data_1)
     circle_index_data_2 = {'experiment_name': '0',
                            'index_type': 'area_perimeter',
-                           'binarisation_fraction': [0.3, 0.5]}
+                           'binarisation_fraction': [0.3, 0.5, 0.7]}
     circle_index_string_2 = get_circle_index_string(**circle_index_data_2)
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
     for profile_index, profile_metadata in metadata_dict.items():
@@ -132,7 +138,12 @@ if __name__ == '__main__':
     json_tools.dump_dict_to_json(metadata_file, metadata_dict, indent=2)
 
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
-    worst_profiles, worst_indices = get_n_worst_label_1_profiles(metadata_dict, number_to_find=100,
+    worst_profiles, worst_indices = get_n_worst_label_1_profiles(metadata_dict, number_to_find=10,
                                                                  **circle_index_data_2)
     print(worst_indices)
     print(worst_profiles)
+    images = beam_profile_imaging.get_profiles_from_indices(worst_profiles,
+                                                            metadata_file=metadata_file,
+                                                            run_inputs_file='run_inputs.json',
+                                                            experiment_name='0')
+    beam_profile_imaging.show_images(images, rows=5)
