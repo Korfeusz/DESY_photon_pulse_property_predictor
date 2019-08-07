@@ -8,7 +8,7 @@ import labeling_algo
 
 if __name__ == '__main__':
     image_number = 0
-    i = 4
+    i = 3
     print('Run number: {} started'.format(i))
     run_input = json_tools.import_json_as_dict('run_inputs/run_input_{}.json'.format(i))
     beam_profiles_import_tool.store_run_input_in_json(run_inputs_file='run_inputs.json', run_input=run_input, indent=2)
@@ -16,10 +16,11 @@ if __name__ == '__main__':
     beam_profiles_raw = beam_profiles_import_tool.get_raw_beam_profiles_from_dict(run_input)
     beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
     beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
-
+    print('Started metadata analysis for run {}'.format(i))
     metadata_file = 'metadata.json'
     beam_profile_metadata_tools.get_metadata_writer(beam_profiles, run_input, metadata_file) \
         .add_beam_profiles_addresses() \
+        .add_corrupted_label() \
         .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5]) \
         .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
         .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
