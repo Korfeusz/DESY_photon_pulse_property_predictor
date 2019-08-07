@@ -14,8 +14,8 @@ if __name__ == '__main__':
     beam_profiles_import_tool.store_run_input_in_json(run_inputs_file='run_inputs.json', run_input=run_input, indent=2)
     beam_profiles = beam_profiles_import_tool.get_beam_profiles_from_dict(run_input)
     beam_profiles_raw = beam_profiles_import_tool.get_raw_beam_profiles_from_dict(run_input)
-    beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
-    beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
+    # beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
+    # beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
     print('Started metadata analysis for run {}'.format(i))
     metadata_file = 'metadata.json'
     beam_profile_metadata_tools.get_metadata_writer(beam_profiles, run_input, metadata_file) \
