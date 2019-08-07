@@ -16,16 +16,20 @@ if __name__ == '__main__':
     beam_profiles_raw = beam_profiles_import_tool.get_raw_beam_profiles_from_dict(run_input)
     # beam_profile_imaging.show_beam_profile(beam_profiles_raw, image_number)
     # beam_profile_imaging.show_beam_profile(beam_profiles, image_number)
+    np.save('beam_profiles_raw', beam_profiles_raw)
+    np.save('beam_profiles', beam_profiles)
     print('Started metadata analysis for run {}'.format(i))
-    metadata_file = 'metadata.json'
-    beam_profile_metadata_tools.get_metadata_writer(beam_profiles, run_input, metadata_file) \
-        .add_beam_profiles_addresses() \
-        .add_corrupted_label() \
-        .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5]) \
-        .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
-        .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
-        .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
-        .dump_metadata_to_json(filename=metadata_file, indent=2)
+
+    # bp = np.load('beam_profiles.npy')
+    # metadata_file = 'meta_test.json'
+    # beam_profile_metadata_tools.get_metadata_writer(bp, run_input, metadata_file) \
+    #     .add_beam_profiles_addresses() \
+    #     .add_corrupted_label() \
+    #     .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5]) \
+    #     .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
+    #     .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
+    #     .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
+    #     .dump_metadata_to_json(filename=metadata_file, indent=2)
 
     print(np.shape(beam_profiles_raw))
 

@@ -19,3 +19,12 @@ def get_addresses_from_indices(indices, metadata_dict):
         address = metadata_dict[index]['address']
         address_list[address['run']].append(address['profile_number'])
     return address_list
+
+
+def get_circle_index_string(experiment_name, index_type, binarisation_fraction=None, ring_thickness=None,
+                            number_of_tests=None):
+    if index_type == 'area_perimeter':
+        settings_string = '_'.join([str(x - int(x)).split('.')[1] for x in binarisation_fraction])
+    elif index_type == 'masking':
+        settings_string = '_'.join([str(ring_thickness), str(number_of_tests)])
+    return 'run_name_{}_{}_settings_{}'.format(experiment_name, index_type, settings_string)
