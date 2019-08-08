@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import json_tools
-import beam_profile_metadata_tools
-import beam_profiles_import_tool
+from beam_profile_metadata import beam_profile_metadata_tools, json_tools
+from beam_profiles_preprocessing import beam_profiles_import_tool
 
 
 def save_beam_profile_image(beam_profile, name='save_test.png'):

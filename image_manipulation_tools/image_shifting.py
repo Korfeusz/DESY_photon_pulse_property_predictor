@@ -1,9 +1,8 @@
 import numpy as np
 import scipy.ndimage
 import skimage.measure
-import time
 
-import binarisation_tools
+from image_manipulation_tools import binarisation_tools
 
 
 def shift_com_to_geometric(data):
@@ -90,7 +89,7 @@ def shift_down(image, value):
 
 
 if __name__ == '__main__':
-    from tools import two_dim_asymmetric_gaussian_function
+    from beam_profile_metadata.tools import two_dim_asymmetric_gaussian_function
     import matplotlib.pyplot as plt
 
 

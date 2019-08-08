@@ -1,9 +1,7 @@
-import time
-
-import constants
+from beam_profiles_preprocessing import constants
 import numpy as np
 import image_manipulation_tools
-import image_shifting
+from image_manipulation_tools import image_shifting
 import skimage
 
 

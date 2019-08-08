@@ -1,8 +1,6 @@
-import json_tools
-import tools
 import numpy as np
-import beam_profile_imaging
-import beam_profile_metadata_tools
+from imaging_tools import beam_profile_imaging
+from beam_profile_metadata import beam_profile_metadata_tools, json_tools, tools
 
 
 def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_name,
@@ -12,7 +10,7 @@ def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_nam
     beam_profiles_found = []
     circle_indices = []
     index_string = beam_profile_metadata_tools.get_circle_index_string(experiment_name, index_type, binarisation_fraction, ring_thickness,
-                                           number_of_tests)
+                                                                       number_of_tests)
 
     for profile_index, profile_metadata in beam_profiles_metadata_dict.items():
         if not profile_metadata['corrupted'] and index_string in profile_metadata['circularity_index'].keys():
@@ -42,9 +40,9 @@ def label_by_threshold(metadata_file, experiment_name, index_type, threshold, bi
                                                                                  circularity_indices_m1,
                                                                                  threshold=threshold)
     index_string = beam_profile_metadata_tools.get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
-                                           binarisation_fraction=binarisation_fraction,
-                                           ring_thickness=ring_thickness,
-                                           number_of_tests=number_of_tests)
+                                                                       binarisation_fraction=binarisation_fraction,
+                                                                       ring_thickness=ring_thickness,
+                                                                       number_of_tests=number_of_tests)
 
     for profile in profiles:
         metadata_dict[profile].setdefault('label', {})
@@ -69,9 +67,9 @@ def get_n_worst_label_1_profiles(beam_profiles_metadata_dict, number_to_find, ex
                                                                            ring_thickness=ring_thickness,
                                                                            number_of_tests=number_of_tests)
     label_name = beam_profile_metadata_tools.get_circle_index_string(experiment_name=experiment_name, index_type=index_type,
-                                         binarisation_fraction=binarisation_fraction,
-                                         ring_thickness=ring_thickness,
-                                         number_of_tests=number_of_tests)
+                                                                     binarisation_fraction=binarisation_fraction,
+                                                                     ring_thickness=ring_thickness,
+                                                                     number_of_tests=number_of_tests)
     indices_of_beam_profiles_labeled_1 = [i for i, p in enumerate(beam_profiles_found) if
                                           beam_profiles_metadata_dict[p]['label'][label_name]['value'] == 1]
     print('Number of label 1s found: {}'.format(len(indices_of_beam_profiles_labeled_1)))
