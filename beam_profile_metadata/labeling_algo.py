@@ -1,6 +1,7 @@
 import numpy as np
 from imaging_tools import beam_profile_imaging
-from beam_profile_metadata import beam_profile_metadata_tools, json_tools, tools
+from beam_profile_metadata import beam_profile_metadata_tools, tools
+from json_tools import json_tools
 
 
 def get_specific_circle_indices_list(beam_profiles_metadata_dict, experiment_name,

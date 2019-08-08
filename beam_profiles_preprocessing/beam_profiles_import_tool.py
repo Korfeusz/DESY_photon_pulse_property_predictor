@@ -1,5 +1,5 @@
 from beam_profiles_preprocessing import file_tools
-from beam_profile_metadata import json_tools
+from json_tools import json_tools
 import numpy as np
 
 

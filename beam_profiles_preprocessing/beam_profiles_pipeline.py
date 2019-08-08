@@ -1,7 +1,6 @@
 from beam_profiles_preprocessing import constants
 import numpy as np
 import image_manipulation_tools
-from image_manipulation_tools import image_shifting
 import skimage
 
 
@@ -35,7 +34,7 @@ class BeamProfilesPipeline:
         return BeamProfilesPipeline(data, self.color_resolution)
 
     def shift_to_center_of_mass(self):
-        data = image_shifting.shift_com_to_geometric(self.beam_profile_data)
+        data = image_manipulation_tools.shift_com_to_geometric(self.beam_profile_data)
         return BeamProfilesPipeline(data, self.color_resolution)
 
     def get_rounded_beam_profiles(self):
@@ -47,5 +46,5 @@ class BeamProfilesPipeline:
         return BeamProfilesPipeline(shape_corrected_data, color_resolution=self.color_resolution)
 
     def shift_to_highest_intensity(self, fraction):
-        data = image_shifting.shift_highest_intensity_to_geometric(self.beam_profile_data, fraction=fraction)
+        data = image_manipulation_tools.shift_highest_intensity_to_geometric(self.beam_profile_data, fraction=fraction)
         return BeamProfilesPipeline(data, self.color_resolution)
