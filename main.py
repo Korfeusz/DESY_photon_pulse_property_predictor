@@ -1,10 +1,6 @@
 import numpy as np
-from tools import get_indices_of_n_lowest_values
-import beam_profile_imaging
-import beam_profiles_import_tool
-import json_tools
-import beam_profile_metadata_tools
-import labeling_algo
+from beam_profiles_preprocessing import beam_profiles_import_tool
+from beam_profile_metadata import json_tools
 
 if __name__ == '__main__':
     image_number = 0

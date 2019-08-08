@@ -1,6 +1,6 @@
 import numpy as np
 from skimage import morphology
-import binarisation_tools
+from image_manipulation_tools import binarisation_tools
 
 
 def change_color_resolution(data, new_resolution, old_resolution):

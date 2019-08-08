@@ -1,6 +1,6 @@
 import numpy as np
 import skimage.measure, skimage.filters
-import binarisation_tools
+from image_manipulation_tools import binarisation_tools
 
 
 def get_circularity_index(data, binarisation_fractions):
@@ -37,7 +37,7 @@ def calculate_experimental_circularity_index(image_perimeters, blob_areas):
 
 
 if __name__ == '__main__':
-    from tools import two_dim_asymmetric_gaussian_function
+    from beam_profile_metadata.tools import two_dim_asymmetric_gaussian_function
     import matplotlib.pyplot as plt
 
 

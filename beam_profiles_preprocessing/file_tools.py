@@ -1,10 +1,9 @@
 from os import listdir
 from os.path import isfile, join
-import path_constants
+from beam_profiles_preprocessing import path_constants, constants
 import numpy as np
 import h5py
-from beam_profiles_pipeline import BeamProfilesPipeline
-import constants
+from beam_profiles_preprocessing.beam_profiles_pipeline import BeamProfilesPipeline
 from contextlib import contextmanager
 
 
