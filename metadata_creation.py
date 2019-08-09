@@ -27,3 +27,15 @@ if __name__ == '__main__':
                                        circularity_entries_2=area_perimeter_entries,
                                        label_name='experimental_combo') \
             .dump_metadata_to_json(filename=metadata_file, indent=2)
+
+
+    # worst_profiles, worst_indices = get_profiles_labeled_1_with_worst_index(metadata_dict, masking_entries_1,
+    #                                                                         number_to_find=10)
+    #
+    # print(worst_indices)
+    # print(worst_profiles)
+    # images = beam_profile_imaging.get_profiles_from_indices(worst_profiles,
+    #                                                         metadata_file=metadata_file,
+    #                                                         run_inputs_file='metadata/run_inputs.json',
+    #                                                         experiment_name='0')
+    # beam_profile_imaging.show_images(images, rows=5)
