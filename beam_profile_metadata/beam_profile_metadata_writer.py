@@ -3,7 +3,7 @@ from beam_profile_metadata import corrupted_image_finding_tools, beam_profile_me
 from json_tools import json_tools
 from beam_profile_metadata.circularity_index_entries import CircularityIndexEntries
 from beam_profile_metadata import labeling_tools
-
+from beam_profile_metadata import train_test_splitting_tools
 
 class BeamProfileMetadataWriter:
     def __init__(self, preprocessed_data, run_metadata, beam_profile_metadata_dict):
@@ -90,7 +90,8 @@ class BeamProfileMetadataWriter:
         return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
 
     def add_train_test_split(self, number_to_take, label_name):
-        pass
+        train_test_splitting_tools.train_test_split(self.beam_profile_metadata_dict, label_name, number_to_take)
+        return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
 
     def dump_metadata_to_json(self, filename, indent=None):
         json_tools.dump_dict_to_json(filename, self.beam_profile_metadata_dict, indent=indent)
