@@ -13,16 +13,11 @@ class CircularityIndexEntries(ABC):
         pass
 
     @abstractmethod
-    def get_profiles(self, metadata_dict):
+    def get_profile_names_and_their_circle_indices(self, metadata_dict):
         for profile_index, profile_metadata in metadata_dict.items():
             if not profile_metadata['corrupted'] and self.index_string in profile_metadata['circularity_index'].keys():
-                yield profile_index
+                yield profile_index, profile_metadata['circularity_index'][self.index_string]['value']
 
-    @abstractmethod
-    def get_circle_indices(self, metadata_dict):
-        for profile_index, profile_metadata in metadata_dict.items():
-            if not profile_metadata['corrupted'] and self.index_string in profile_metadata['circularity_index'].keys():
-                yield profile_metadata['circularity_index'][self.index_string]['value']
 
     @property
     @abstractmethod
@@ -61,11 +56,8 @@ class AreaPerimeterIndexEntries(CircularityIndexEntries):
     def experiment_name(self):
         return self._experiment_name
 
-    def get_circle_indices(self, metadata_dict):
-        return super().get_circle_indices(metadata_dict)
-
-    def get_profiles(self, metadata_dict):
-        return super().get_profiles(metadata_dict)
+    def get_profile_names_and_their_circle_indices(self, metadata_dict):
+        return super().get_profile_names_and_their_circle_indices(metadata_dict)
 
 
 class MaskingIndexEntries(CircularityIndexEntries):
@@ -98,11 +90,8 @@ class MaskingIndexEntries(CircularityIndexEntries):
     def experiment_name(self):
         return self._experiment_name
 
-    def get_circle_indices(self, metadata_dict):
-        return super().get_circle_indices(metadata_dict)
-
-    def get_profiles(self, metadata_dict):
-        return super().get_profiles(metadata_dict)
+    def get_profile_names_and_their_circle_indices(self, metadata_dict):
+        return super().get_profile_names_and_their_circle_indices(metadata_dict)
 
 
 if __name__ == '__main__':
@@ -110,10 +99,10 @@ if __name__ == '__main__':
     dic = import_json_as_dict('../metadata/meta_test.json')
     a = AreaPerimeterIndexEntries(binarisation_fractions=[0.3, 0.5, 0.7], experiment_name='0')
     b = MaskingIndexEntries(experiment_name='0', ring_thickness=20, number_of_tests=2)
-    l = list(a.get_profiles(dic))
+    l = list(a.get_profile_names_and_their_circle_indices(dic))
     print(l[:10])
-    print(type(a.get_profiles(dic)))
+    print(type(a.get_profile_names_and_their_circle_indices(dic)))
 
-    l = list(b.get_profiles(dic))
+    l = list(b.get_profile_names_and_their_circle_indices(dic))
     print(l[:10])
-    print(type(b.get_profiles(dic)))
+    print(type(b.get_profile_names_and_their_circle_indices(dic)))
