@@ -25,7 +25,7 @@ def sample_train_test_profiles(metadata_dict, label_name, number_to_sample):
 
 def clear_previous_train_test_split(metadata_dict):
     for profile, data in metadata_dict.items():
-        dictionary_tools.insert_keyval_without_overwriting(data, key='train_test', value=False)
+        dictionary_tools.insert_keyval_without_overwriting(data, key='train_test', value='unused')
 
 
 def insert_train_test_value(metadata_dict, profiles, value):
@@ -37,5 +37,19 @@ def insert_train_test_value(metadata_dict, profiles, value):
 def train_test_split(metadata_dict, label_name, number_to_sample):
     labeled_1_sample, labeled_0_sample = sample_train_test_profiles(metadata_dict, label_name, number_to_sample)
     clear_previous_train_test_split(metadata_dict)
-    insert_train_test_value(metadata_dict, labeled_1_sample, True)
-    insert_train_test_value(metadata_dict, labeled_0_sample, True)
+
+    number_to_sample_as_train = int(len(labeled_1_sample)/2)
+
+    random.shuffle(labeled_1_sample)
+    random.shuffle(labeled_0_sample)
+
+    labeled_1_sample_for_training = labeled_1_sample[:number_to_sample_as_train]
+    labeled_1_sample_for_testing = labeled_1_sample[number_to_sample_as_train:]
+    labeled_0_sample_for_training = labeled_0_sample[:number_to_sample_as_train]
+    labeled_0_sample_for_testing = labeled_0_sample[number_to_sample_as_train:]
+
+    insert_train_test_value(metadata_dict, labeled_1_sample_for_training, 'train')
+    insert_train_test_value(metadata_dict, labeled_1_sample_for_testing, 'test')
+    insert_train_test_value(metadata_dict, labeled_0_sample_for_training, 'train')
+    insert_train_test_value(metadata_dict, labeled_0_sample_for_testing, 'test')
+
