@@ -1,6 +1,8 @@
 from circle_finding_tools import masking_method_circle_finding_tool, area_perimeter_circle_finding_tool
 from beam_profile_metadata import corrupted_image_finding_tools, beam_profile_metadata_tools
 from json_tools import json_tools
+from beam_profile_metadata.circularity_index_entries import CircularityIndexEntries
+from beam_profile_metadata import labeling_tools
 
 
 class BeamProfileMetadataWriter:
@@ -79,10 +81,15 @@ class BeamProfileMetadataWriter:
 
         return self.add_value_to_runs(address_entry, ignore_corrupted=False)
 
-    def add_labels(self):
-        pass
+    def add_labels_by_threshold(self, threshold, circularity_entries: CircularityIndexEntries):
+        labeling_tools.label_by_threshold(self.beam_profile_metadata_dict, circularity_entries, threshold)
+        return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
 
-    def add_train_test_split(self):
+    def add_labels_by_combination(self, circularity_entries_1, circularity_entries_2, label_name):
+        labeling_tools.label_by_combination(self.beam_profile_metadata_dict, circularity_entries_1, circularity_entries_2, label_name)
+        return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
+
+    def add_train_test_split(self, number_to_take, label_name):
         pass
 
     def dump_metadata_to_json(self, filename, indent=None):
