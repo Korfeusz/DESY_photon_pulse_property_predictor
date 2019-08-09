@@ -21,11 +21,12 @@ if __name__ == '__main__':
             .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
             .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
             .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
-            .add_labels_by_threshold(threshold=10, circularity_entries=masking_entries) \
-            .add_labels_by_threshold(threshold=5, circularity_entries=area_perimeter_entries) \
+            .add_labels_by_threshold(threshold=1e-10, circularity_entries=masking_entries) \
+            .add_labels_by_threshold(threshold=0.7, circularity_entries=area_perimeter_entries) \
             .add_labels_by_combination(circularity_entries_1=masking_entries,
                                        circularity_entries_2=area_perimeter_entries,
                                        label_name='experimental_combo') \
+            .add_train_test_split(number_to_take=3, label_name='experimental_combo') \
             .dump_metadata_to_json(filename=metadata_file, indent=2)
 
 
