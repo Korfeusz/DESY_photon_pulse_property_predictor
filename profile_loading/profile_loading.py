@@ -3,6 +3,12 @@ import numpy as np
 from contextlib import suppress
 
 
+def get_train_test_split_data(metadata_dict, label_name, path_to_data, runs=list(range(9))):
+    labels_and_profiles_train = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='train', runs=runs)
+    labels_and_profiles_test = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='test', runs=runs)
+    return get_x_y_data(labels_and_profiles_train, path_to_data), get_x_y_data(labels_and_profiles_test, path_to_data)
+
+
 def get_address_and_label_of_train_test_data(metadata_dict: dict, label_name, assignment='train'):
     for index, metadata in metadata_dict.items():
         if "train_test" in metadata and metadata['train_test'] == assignment:
@@ -37,19 +43,14 @@ def get_x_y_data(labels_and_profiles, path_to_data):
     labels = []
     image_index = 0
     for run_number, access_dict in enumerate(labels_and_profiles):
-        with suppress(FileNotFoundError):
-            beam_profiles = np.load(path_to_data.format(run_number))
-            if run_number == 0:
-                images = get_placeholder_images_from_first_run(beam_profiles, labels_and_profiles)
-            labels.extend(access_dict['labels'])
-            image_index = insert_new_profiles_to_placeholder(beam_profiles, access_dict, image_index, images)
-    return images, labels
+        beam_profiles = np.load(path_to_data.format(run_number))
+        if run_number == 0:
+            images = get_placeholder_images_from_first_run(beam_profiles, labels_and_profiles)
+        labels.extend(access_dict['labels'])
+        image_index = insert_new_profiles_to_placeholder(beam_profiles, access_dict, image_index, images)
+    return images, np.array(labels)
 
 
-def get_train_test_split_data(metadata_dict, label_name, path_to_data, runs=list(range(9))):
-    labels_and_profiles_train = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='train', runs=runs)
-    labels_and_profiles_test = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='test', runs=runs)
-    return get_x_y_data(labels_and_profiles_train, path_to_data), get_x_y_data(labels_and_profiles_test, path_to_data)
 
 
 if __name__ == '__main__':
