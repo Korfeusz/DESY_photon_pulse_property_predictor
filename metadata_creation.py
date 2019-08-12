@@ -3,7 +3,7 @@ import beam_profile_metadata
 import json_tools
 
 if __name__ == '__main__':
-    run_numbers = [3]
+    run_numbers = [0, 1, 2, 3]
     metadata_file = 'metadata/meta_test_1.json'
     for run_number in run_numbers:
         print('Started metadata analysis for run {}'.format(run_number))
@@ -26,7 +26,7 @@ if __name__ == '__main__':
             .add_labels_by_combination(circularity_entries_1=masking_entries,
                                        circularity_entries_2=area_perimeter_entries,
                                        label_name='experimental_combo') \
-            .add_train_test_split(number_to_take=3, label_name='experimental_combo') \
+            .add_train_test_split(number_to_take=100, label_name='experimental_combo') \
             .dump_metadata_to_json(filename=metadata_file, indent=2)
 
 

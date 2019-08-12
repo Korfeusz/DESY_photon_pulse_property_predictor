@@ -4,7 +4,7 @@ import json_tools
 
 
 if __name__ == '__main__':
-    run_numbers = [3]
+    run_numbers = [0, 1, 2, 3]
     for run_number in run_numbers:
         print('Run number: {} started'.format(run_number))
         run_input = json_tools.import_json_as_dict('run_inputs/run_input_{}.json'.format(run_number))
