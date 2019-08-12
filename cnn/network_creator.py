@@ -1,24 +1,27 @@
-# def make_dropout(layers, dropout_structure):
-#     for rate, i in zip(dropout_structure['rate'], dropout_structure['layer']):
-#         layers[i] = tf.nn.dropout(layers[i], rate=rate)
-#     return layers
-#
-#
-# def get_convolutional_layers(convolution_channels, image_input):
-#     layers = []
-#     weights = []
-#     biases = []
-#     x = image_input
-#     weight_structure = list(zip(convolution_channels, convolution_channels[1:]))
-#     for w1, w2 in weight_structure:
-#         weights.append(tf.Variable(tf.truncated_normal(shape=[3, 3, w1, w2], stddev=0.1)))
-#         biases.append(tf.Variable(tf.ones([w2]) / 10))
-#         x = tf.nn.conv2d(x, weights[-1], strides=[1, 1, 1, 1], padding='SAME')
-#         x = tf.nn.bias_add(x, biases[-1])
-#         x = tf.nn.relu(x)
-#         layers.append(tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME'))
-#         x = layers[-1]
-#     return layers
+import tensorflow as tf
+
+
+def make_dropout(layers, dropout_structure):
+    for rate, i in zip(dropout_structure['rate'], dropout_structure['layer']):
+        layers[i] = tf.nn.dropout(layers[i], rate=rate)
+    return layers
+
+
+def get_convolutional_layers(convolution_channels, image_input):
+    layers = []
+    weights = []
+    biases = []
+    x = image_input
+    weight_structure = list(zip(convolution_channels, convolution_channels[1:]))
+    for w1, w2 in weight_structure:
+        weights.append(tf.Variable(tf.truncated_normal(shape=[3, 3, w1, w2], stddev=0.1)))
+        biases.append(tf.Variable(tf.ones([w2]) / 10))
+        x = tf.nn.conv2d(x, weights[-1], strides=[1, 1, 1, 1], padding='SAME')
+        x = tf.nn.bias_add(x, biases[-1])
+        x = tf.nn.relu(x)
+        layers.append(tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME'))
+        x = layers[-1]
+    return layers
 #
 #
 # def reshape_convolution_output(convolution_channels, convolution_layers):
