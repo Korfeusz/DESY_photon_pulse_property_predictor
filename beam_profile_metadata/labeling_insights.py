@@ -2,13 +2,19 @@ from beam_profile_metadata import tools
 import numpy as np
 
 
-def get_profiles_labeled_1_with_worst_index(metadata_dict, circularity_entries, number_to_find):
+def get_profiles_labeled_1_with_worst_index(metadata_dict, circularity_entries, number_to_find,
+                                            show_number_of_labeled_1=False):
     profile_names, circularity_indices = get_profile_names_and_circularity_indices(circularity_entries, metadata_dict)
     indices_of_beam_profiles_labeled_1 = get_indices_of_beam_profiles_labeled_1(profile_names, metadata_dict,
                                                                                 circularity_entries.index_string)
     beam_profiles_labeled_1 = fancy_index_list_and_convert_to_array(profile_names, indices_of_beam_profiles_labeled_1)
     circle_indices_of_beam_profiles_labeled_1 = fancy_index_list_and_convert_to_array(circularity_indices,
                                                                                       indices_of_beam_profiles_labeled_1)
+    if show_number_of_labeled_1:
+        print('Number of beam profiles labeled 1: {}'.format(len(circle_indices_of_beam_profiles_labeled_1)))
+        print('Total number of beam profiles: {}'.format(len(profile_names)))
+        print('Percentage of profiles labeled 1: {0:.1f}%'.format(
+            len(circle_indices_of_beam_profiles_labeled_1) / len(profile_names) * 100))
     worst_indices = get_worst_indices(circle_indices_of_beam_profiles_labeled_1, number_to_find)
     return beam_profiles_labeled_1[worst_indices], circle_indices_of_beam_profiles_labeled_1[worst_indices]
 
