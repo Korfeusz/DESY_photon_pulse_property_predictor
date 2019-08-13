@@ -5,6 +5,7 @@ from beam_profile_metadata.circularity_index_entries import CircularityIndexEntr
 from beam_profile_metadata import labeling_tools
 from beam_profile_metadata import train_test_splitting_tools
 
+
 class BeamProfileMetadataWriter:
     def __init__(self, preprocessed_data, run_metadata, beam_profile_metadata_dict):
         self.data = preprocessed_data
@@ -96,10 +97,10 @@ class BeamProfileMetadataWriter:
     def dump_metadata_to_json(self, filename, indent=None):
         json_tools.dump_dict_to_json(filename, self.beam_profile_metadata_dict, indent=indent)
 
-    def add_corrupted_label(self):
+    def add_corrupted_label(self, threshold):
         def corrupted_image_entry(i):
             self.get_profile_entry(i).setdefault('corrupted', bool)
             self.get_profile_entry(i)['corrupted'] = empty_images[i]
 
-        empty_images = corrupted_image_finding_tools.find_empty_images(self.data)
+        empty_images = corrupted_image_finding_tools.find_empty_images(self.data, threshold)
         return self.add_value_to_runs(corrupted_image_entry, ignore_corrupted=False)
