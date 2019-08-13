@@ -1,2 +1,3 @@
 from .beam_profile_metadata_tools import get_metadata_writer
 from .circularity_index_entries import AreaPerimeterIndexEntries, MaskingIndexEntries
+from .labeling_insights import get_profiles_labeled_1_with_worst_index
