@@ -21,12 +21,14 @@ if __name__ == '__main__':
     lr_decay_callback = tf.keras.callbacks.LearningRateScheduler(cnn.cnn_tools.lr_decay, verbose=True)
 
 
-    BATCH_SIZE = 20
-    steps_per_epoch = 100 // BATCH_SIZE  # 60,000 items in this dataset
-    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    BATCH_SIZE = 64
+    steps_per_epoch = x_train.shape[0] // BATCH_SIZE  # 60,000 items in this dataset
+    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + '_test_4_huge'
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
-    history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch, epochs=100,
+
+    history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch,
+                        epochs=25,
                         validation_data=(x_test, y_test_1h), validation_steps=1,
                         callbacks=[lr_decay_callback, tensorboard_callback])
 
-
+    model.save('../model/model_1.h5')

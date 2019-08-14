@@ -4,7 +4,6 @@ from beam_profile_metadata import beam_profile_metadata_tools
 from json_tools import json_tools
 from beam_profiles_preprocessing import beam_profiles_import_tool
 
-
 def save_beam_profile_image(beam_profile, name='save_test.png'):
     plt.imsave(name,
                beam_profile,
@@ -46,11 +45,19 @@ def get_profiles_from_indices(indices_array, metadata_file, run_inputs_file, exp
     return images
 
 
-def show_images(images, rows=1, title='test', save=False):
+def show_images(images, rows=1, title='test', save=False, list_of_labels=None, list_of_colors=None):
     n_images = len(images)
     fig = plt.figure()
+    if list_of_labels is not None and list_of_colors is None:
+        list_of_colors = ['black' for _ in range(len(list_of_labels))]
     for n, image in enumerate(images):
         a = fig.add_subplot(rows, np.ceil(n_images / float(rows)), n + 1)
+        if list_of_labels is not None:
+
+            a.text(1.3, 0.01, list_of_labels[n],
+                   verticalalignment='bottom', horizontalalignment='right',
+                   transform=a.transAxes,
+                   color=list_of_colors[n], fontsize=10)
         a.axis('off')
         if n < np.ceil(n_images / float(rows)):
             a.set_title(str(n), loc='left')
@@ -76,8 +83,9 @@ if __name__ == '__main__':
          '4_6223', '4_6224', '4_6225', '4_6167', '4_6286', '4_6228', '4_6168', '4_6285',
          '4_6283', '4_6282', '4_6281', '4_6280', '4_6279', '4_6278', '4_6277', '4_6276',
          '4_6275', '4_6274', '4_6284', '8_1726']
+    print(len(a))
     images = get_profiles_from_indices(a,
-                                       metadata_file='metadata_total.json',
-                                       run_inputs_file='run_inputs.json',
+                                       metadata_file='../metadata/metadata.json',
+                                       run_inputs_file='../metadata/run_inputs.json',
                                        experiment_name='0')
-    show_images(images, rows=10)
+    show_images(images, rows=10, list_of_labels=[np.random.randint(2) for _ in range(len(a))])
