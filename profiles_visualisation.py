@@ -3,7 +3,7 @@ import imaging_tools
 import json_tools
 
 if __name__ == '__main__':
-    metadata_file = 'metadata/meta_test_2.json'
+    metadata_file = 'metadata/metadata.json'
     experiment_name = '0'
     run_inputs_file = 'metadata/run_inputs.json'
 

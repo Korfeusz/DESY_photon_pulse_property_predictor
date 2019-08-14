@@ -90,8 +90,8 @@ class BeamProfileMetadataWriter:
         labeling_tools.label_by_combination(self.beam_profile_metadata_dict, circularity_entries_1, circularity_entries_2, label_name)
         return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
 
-    def add_train_test_split(self, number_to_take, label_name):
-        train_test_splitting_tools.train_test_split(self.beam_profile_metadata_dict, label_name, number_to_take)
+    def add_train_test_split(self, number_to_take, label_name, ratio_of_train=0.5):
+        train_test_splitting_tools.train_test_split(self.beam_profile_metadata_dict, label_name, number_to_take, ratio_of_train)
         return BeamProfileMetadataWriter(self.data, self.run_metadata, self.beam_profile_metadata_dict)
 
     def dump_metadata_to_json(self, filename, indent=None):

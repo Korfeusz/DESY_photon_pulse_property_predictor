@@ -3,17 +3,12 @@ import beam_profile_metadata
 import json_tools
 
 if __name__ == '__main__':
-    run_numbers = [4]
-    metadata_file = 'metadata/meta_test_2.json'
+    run_numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    metadata_file = 'metadata/metadata.json'
     for run_number in run_numbers:
         print('Started metadata analysis for run {}'.format(run_number))
         beam_profiles = np.load('/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}.npy'.format(run_number))
-        beam_profiles = beam_profiles[0:2000]
-
         sums = np.sum(np.sum(beam_profiles, axis=2), axis=1)
-        print(np.mean(sums))
-        print(sums[953])
-        print(sums[400])
         run_input = json_tools.import_json_as_dict('run_inputs/run_input_{}.json'.format(run_number))
         masking_entries = beam_profile_metadata.MaskingIndexEntries(ring_thickness=10, number_of_tests=2,
                                                                     experiment_name=run_input['experiment_name'])
