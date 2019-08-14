@@ -48,3 +48,8 @@ class BeamProfilesPipeline:
     def shift_to_highest_intensity(self, fraction):
         data = image_manipulation_tools.shift_highest_intensity_to_geometric(self.beam_profile_data, fraction=fraction)
         return BeamProfilesPipeline(data, self.color_resolution)
+
+    def downsize_images(self, factor):
+        data = skimage.transform.downscale_local_mean(self.beam_profile_data, factors=(1, factor, factor))
+        return BeamProfilesPipeline(data, self.color_resolution)
+

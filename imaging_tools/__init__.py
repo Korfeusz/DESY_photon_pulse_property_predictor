@@ -1,1 +1,1 @@
-from .beam_profile_imaging import get_profiles_from_indices, show_images
+from .beam_profile_imaging import get_profiles_from_indices, show_images, show_beam_profile

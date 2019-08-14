@@ -34,11 +34,11 @@ def insert_train_test_value(metadata_dict, profiles, value):
             dictionary_tools.insert_keyval_without_overwriting(data, key='train_test', value=value)
 
 
-def train_test_split(metadata_dict, label_name, number_to_sample):
+def train_test_split(metadata_dict, label_name, number_to_sample, ratio_of_train):
     labeled_1_sample, labeled_0_sample = sample_train_test_profiles(metadata_dict, label_name, number_to_sample)
     clear_previous_train_test_split(metadata_dict)
 
-    number_to_sample_as_train = int(len(labeled_1_sample)/2)
+    number_to_sample_as_train = int(len(labeled_1_sample) * ratio_of_train)
 
     random.shuffle(labeled_1_sample)
     random.shuffle(labeled_0_sample)
