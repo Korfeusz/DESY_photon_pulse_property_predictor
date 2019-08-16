@@ -18,9 +18,7 @@ if __name__ == '__main__':
         beam_profile_metadata.get_metadata_writer(beam_profiles, run_input, metadata_file) \
             .add_beam_profiles_addresses() \
             .add_corrupted_label(threshold=1000) \
-            .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5]) \
-            .add_masking_method_circularity_indices(ring_thickness=10, number_of_tests=2) \
-            .add_masking_method_circularity_indices(ring_thickness=20, number_of_tests=2) \
-            .add_area_perimeter_squared_circularity_indices(binarisation_fractions=[0.3, 0.5, 0.7]) \
+            .add_circularity_indices(masking_entries) \
+            .add_circularity_indices(area_perimeter_entries) \
             .dump_metadata_to_json(filename=metadata_file, indent=2)
 
