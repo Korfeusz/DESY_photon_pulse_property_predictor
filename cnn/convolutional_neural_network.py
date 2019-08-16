@@ -23,12 +23,12 @@ if __name__ == '__main__':
 
     BATCH_SIZE = 64
     steps_per_epoch = x_train.shape[0] // BATCH_SIZE  # 60,000 items in this dataset
-    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + '_test_4_huge'
+    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + '_12_24_drOP05_20'
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
 
     history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch,
-                        epochs=25,
+                        epochs=100,
                         validation_data=(x_test, y_test_1h), validation_steps=1,
                         callbacks=[lr_decay_callback, tensorboard_callback])
 
-    model.save('../model/model_1.h5')
+    model.save('../model/model_13.h5')

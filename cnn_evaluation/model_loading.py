@@ -52,18 +52,19 @@ def get_predictions_from_model(filename, profiles):
 
 
 def get_all_beam_profiles_from_filename(filename, metadata_dict):
-
-
+    data = np.load(filename.format(0))
+    for i in range(1, 9):
+        data = np.vstack((data, np.load(filename.format(i))))
     return data
 
 
 if __name__ == '__main__':
-    metadata_dict = json_tools.import_json_as_dict('../metadata/metadata.json')
-    all_data = get_all_beam_profiles_from_filename(filename='/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy',
-                                                   metadata_dict=metadata_dict)
-
-    print(all_data.shape)
-    # (_, _), (x_test, y_test) = cnn.save_and_load_profiles.load_profiles()
-    predictions = get_predictions_from_model('../model/model_1.h5', all_data)
-    show_random_100_images_with_labels(images=all_data, predicted_label=predictions,
-                                       correct_label=None)
+    # metadata_dict = json_tools.import_json_as_dict('../metadata/metadata.json')
+    # all_data = get_all_beam_profiles_from_filename(filename='/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy',
+    #                                                metadata_dict=metadata_dict)
+    #
+    # print(all_data.shape)
+    (_, _), (x_test, y_test) = cnn.save_and_load_profiles.load_profiles()
+    predictions = get_predictions_from_model('../model/model_12.h5', x_test)
+    show_random_100_images_with_labels(images=x_test, predicted_label=predictions,
+                                       correct_label=y_test)
