@@ -20,7 +20,7 @@ def show_random_100_images_with_labels(images, predicted_label, correct_label=No
         title = 'FP: {FP}, FN: {FN}, TP: {TP}, TN: {TN}'.format(**prediction_tools.get_confusion_matrix(predicted, correct))
         colors = np.array(['green' if p == t else 'red' for p, t in zip(predicted, correct)])
     else:
-        title = 'Predicted_labels'
+        title = 'ones: {}, zeros: {}'.format(sum(predicted), 100 - sum(predicted))
         colors = None
 
     labels = np.array(['1' if p == 1 else '0' for p in predicted])

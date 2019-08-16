@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from circle_finding_tools import masking_method_circle_finding_tool, area_perimeter_circle_finding_tool
 
 
 class CircularityIndexEntries(ABC):
@@ -27,6 +28,10 @@ class CircularityIndexEntries(ABC):
     @property
     @abstractmethod
     def experiment_name(self):
+        pass
+
+    @abstractmethod
+    def calculate_indices(self, data):
         pass
 
 
@@ -58,6 +63,10 @@ class AreaPerimeterIndexEntries(CircularityIndexEntries):
 
     def get_profile_names_and_their_circle_indices(self, metadata_dict):
         return super().get_profile_names_and_their_circle_indices(metadata_dict)
+
+    def calculate_indices(self, data):
+        return area_perimeter_circle_finding_tool.get_circularity_index(data=data,
+                                                                        binarisation_fractions=self.binarisation_fractions)
 
 
 class MaskingIndexEntries(CircularityIndexEntries):
@@ -92,6 +101,11 @@ class MaskingIndexEntries(CircularityIndexEntries):
 
     def get_profile_names_and_their_circle_indices(self, metadata_dict):
         return super().get_profile_names_and_their_circle_indices(metadata_dict)
+
+    def calculate_indices(self, data):
+        return masking_method_circle_finding_tool.is_circle_in_center_of_images(data=data,
+                                                                                ring_thickness=self.ring_thickness,
+                                                                                number_of_tests=self.number_of_tests)
 
 
 if __name__ == '__main__':
