@@ -13,14 +13,24 @@ def get_profiles_labeled_specifically(metadata_dict, label_name, label):
     return [p for p in profiles_generator if metadata_dict[p]['label'][label_name]['value'] == label]
 
 
-def sample_train_test_profiles(metadata_dict, label_name, number_to_sample):
+def sample_train_test_profiles(metadata_dict, label_name, number_to_sample, ratio_of_1s):
     labeled_1 = get_profiles_labeled_specifically(metadata_dict, label_name, 1)
     labeled_0 = get_profiles_labeled_specifically(metadata_dict, label_name, 0)
-    if number_to_sample > len(labeled_1):
-        number_to_sample = len(labeled_1)
-    if number_to_sample > len(labeled_0):
-        number_to_sample = len(labeled_0)
-    return random.sample(labeled_1, number_to_sample), random.sample(labeled_0, number_to_sample)
+    number_of_1s_to_sample, number_of_0s_to_sample = get_number_of_1s_and_0s(number_to_sample,
+                                                                             ratio_of_1s,
+                                                                             len(labeled_0),
+                                                                             len(labeled_1))
+    return random.sample(labeled_1, number_of_1s_to_sample), random.sample(labeled_0, number_of_0s_to_sample)
+
+
+def get_number_of_1s_and_0s(number_to_sample, ratio_of_1s, true_number_of_0s, true_number_of_1s):
+    number_of_1s_to_sample = number_to_sample * ratio_of_1s
+    if number_of_1s_to_sample > true_number_of_1s:
+        number_of_1s_to_sample = true_number_of_1s
+    number_of_0s_to_sample = calculate_number_of_0s(ratio_of_1s, number_of_1s_to_sample)
+    if number_of_0s_to_sample > true_number_of_0s:
+        number_of_0s_to_sample = true_number_of_0s
+    return int(number_of_1s_to_sample), int(number_of_0s_to_sample)
 
 
 def clear_previous_train_test_split(metadata_dict):
@@ -34,19 +44,24 @@ def insert_train_test_value(metadata_dict, profiles, value):
             dictionary_tools.insert_keyval_without_overwriting(data, key='train_test', value=value)
 
 
-def train_test_split(metadata_dict, label_name, number_to_sample, ratio_of_train):
-    labeled_1_sample, labeled_0_sample = sample_train_test_profiles(metadata_dict, label_name, number_to_sample)
+def calculate_number_of_0s(ratio_of_1s, number_of_zeros):
+    return number_of_zeros * (1 / ratio_of_1s - 1)
+
+
+def train_test_split(metadata_dict, label_name, number_to_sample, ratio_of_train, ratio_of_1s):
+    labeled_1_sample, labeled_0_sample = sample_train_test_profiles(metadata_dict, label_name, number_to_sample, ratio_of_1s)
     clear_previous_train_test_split(metadata_dict)
 
-    number_to_sample_as_train = int(len(labeled_1_sample) * ratio_of_train)
+    number__of_0s_to_sample_as_train = int(len(labeled_0_sample) * ratio_of_train)
+    number__of_1s_to_sample_as_train = int(len(labeled_1_sample) * ratio_of_train)
 
     random.shuffle(labeled_1_sample)
     random.shuffle(labeled_0_sample)
 
-    labeled_1_sample_for_training = labeled_1_sample[:number_to_sample_as_train]
-    labeled_1_sample_for_testing = labeled_1_sample[number_to_sample_as_train:]
-    labeled_0_sample_for_training = labeled_0_sample[:number_to_sample_as_train]
-    labeled_0_sample_for_testing = labeled_0_sample[number_to_sample_as_train:]
+    labeled_1_sample_for_training = labeled_1_sample[:number__of_1s_to_sample_as_train]
+    labeled_1_sample_for_testing = labeled_1_sample[number__of_1s_to_sample_as_train:]
+    labeled_0_sample_for_training = labeled_0_sample[:number__of_0s_to_sample_as_train]
+    labeled_0_sample_for_testing = labeled_0_sample[number__of_0s_to_sample_as_train:]
 
     insert_train_test_value(metadata_dict, labeled_1_sample_for_training, 'train')
     insert_train_test_value(metadata_dict, labeled_1_sample_for_testing, 'test')
