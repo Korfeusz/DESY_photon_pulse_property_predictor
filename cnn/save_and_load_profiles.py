@@ -4,7 +4,7 @@ import numpy as np
 
 
 def save_profiles():
-    metadata_dict = json_tools.import_json_as_dict('metadata/metadata.json')
+    metadata_dict = json_tools.import_json_as_dict('metadata/metadata_1.json')
     (x_train, y_train), (x_test, y_test) = profile_loading.get_train_test_split_data(metadata_dict,
                                                                                      label_name='experimental_combo',
                                                                                      path_to_data='/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy',

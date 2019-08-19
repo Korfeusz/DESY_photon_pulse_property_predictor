@@ -6,6 +6,9 @@ import cnn
 if __name__ == '__main__':
     (x_train, y_train), (x_test, y_test) = cnn.save_and_load_profiles.load_profiles()
 
+    print('Ratio of 1s to ll in train: {}'.format(sum(y_train)/len(y_train)))
+    print('Ratio of 1s to ll in test: {}'.format(sum(y_test)/len(y_test)))
+
 
     y_train_1h = preparatory_tools.one_hot(y_train, 2)
     y_test_1h = preparatory_tools.one_hot(y_test, 2)
@@ -22,13 +25,13 @@ if __name__ == '__main__':
 
 
     BATCH_SIZE = 64
-    steps_per_epoch = x_train.shape[0] // BATCH_SIZE  # 60,000 items in this dataset
-    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S") + '_12_24_drOP05_20'
+    steps_per_epoch = x_train.shape[0] // BATCH_SIZE
+    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
 
     history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch,
-                        epochs=100,
+                        epochs=25,
                         validation_data=(x_test, y_test_1h), validation_steps=1,
                         callbacks=[lr_decay_callback, tensorboard_callback])
 
-    model.save('../model/model_5_1.h5')
+    model.save('../model/model_2_biased.h5')
