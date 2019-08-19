@@ -21,4 +21,3 @@ if __name__ == '__main__':
             .add_circularity_indices(masking_entries) \
             .add_circularity_indices(area_perimeter_entries) \
             .dump_metadata_to_json(filename=metadata_file, indent=2)
-

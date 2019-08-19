@@ -31,4 +31,4 @@ if __name__ == '__main__':
                         validation_data=(x_test, y_test_1h), validation_steps=1,
                         callbacks=[lr_decay_callback, tensorboard_callback])
 
-    model.save('../model/model_13.h5')
+    model.save('../model/model_5_1.h5')

@@ -38,3 +38,9 @@ def get_all_uncorrupted_beam_profiles(data_storage_filename, metadata_dict):
     indices = get_all_uncorrupted_indices(metadata_dict)
     sorted_indices = sort_indices_by_run_number_and_profile_number(indices)
     return get_beam_profiles_from_indices(data_storage_filename, sorted_indices)
+
+
+def get_uncorrupted_beam_profiles_for_run(data_storage_filename, metadata_dict, run_no):
+    indices = get_uncorrupted_indices_for_a_specific_run(metadata_dict, run_no)
+    sorted_indices = sort_indices_by_run_number_and_profile_number(indices)
+    return get_beam_profiles_from_indices(data_storage_filename, sorted_indices)

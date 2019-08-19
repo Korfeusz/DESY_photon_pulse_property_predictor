@@ -17,3 +17,7 @@ def get_confusion_matrix(predicted, correct):
 def get_predictions_from_model(filename, profiles):
     model = tf.keras.models.load_model(filename)
     return model.predict_classes(profiles)
+
+
+def get_ratio_of_1s(predictions):
+    return sum(predictions) / (len(predictions) - sum(predictions))
