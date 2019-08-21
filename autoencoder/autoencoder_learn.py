@@ -41,14 +41,16 @@ if __name__ == '__main__':
     visualise_random_results(x_test, decoded_images, n=10)
 
     model_name = 'test_autoencoder'
-    codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}'.format(model_name)
+    codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}.npy'.format(model_name)
     model_save = '../model/{}.h5'.format(model_name)
+    encoder_save = '../model/{}_encoder.h5'.format(model_name)
     encoder = tf.keras.models.Model(input_img, encoded)
     encoded_images = encoder.predict(all_profiles)
     np.save(codes_save, encoded_images)
     autoencoder.save(model_save)
-
+    encoder.save(encoder_save)
     add_autoencoder_run_to_metadata(metadata_file, code_filename=codes_save,
                                     model_filename=model_save,
-                                    indices=all_indices)
+                                    indices=all_indices,
+                                    encoder_file=encoder_save)
 

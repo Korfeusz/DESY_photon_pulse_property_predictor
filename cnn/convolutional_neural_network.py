@@ -35,3 +35,5 @@ if __name__ == '__main__':
                         callbacks=[lr_decay_callback, tensorboard_callback])
 
     model.save('../model/model_2_biased.h5')
+
+    
