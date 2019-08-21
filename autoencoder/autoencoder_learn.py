@@ -11,8 +11,8 @@ if __name__ == '__main__':
     # (x_train, _), (x_test, _) = load_profiles()
     metadata_file = '../metadata/metadata_1.json'
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
-    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_lowcolor_downsized.npy'
-    final_shape = (16, 16)
+    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
+    final_shape = (32, 32)
     (x_train, train_indices), (x_test, test_indices), (all_profiles, all_indices) = get_train_test_split_data(
         data_storage_filename, metadata_dict,
         normalize=True,
@@ -30,7 +30,7 @@ if __name__ == '__main__':
     lr_decay_callback = tf.keras.callbacks.LearningRateScheduler(lr_decay, verbose=True)
 
     autoencoder.fit(x_train, x_train,
-                    epochs=3,
+                    epochs=50,
                     batch_size=512,
                     shuffle=True,
                     validation_data=(x_test, x_test),
