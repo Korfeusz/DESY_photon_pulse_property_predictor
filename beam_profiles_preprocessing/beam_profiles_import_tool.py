@@ -23,7 +23,7 @@ def get_beam_profiles_from_dict(run_input):
                 .get_rounded_beam_profiles()
 
 
-def get_raw_beam_profiles_from_dict(run_input, downsize=None):
+def get_raw_beam_profiles_from_dict(run_input, downsize=None, color_resolution=None):
     with file_tools.get_run(run_number=run_input['run_number']) as current_run:
         beam_profiles = file_tools \
             .get_beam_profiles_pipeline(current_run=current_run, profiles_list=run_input['profiles_range']) \
@@ -32,6 +32,8 @@ def get_raw_beam_profiles_from_dict(run_input, downsize=None):
             .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max'])
         if downsize is not None:
             beam_profiles = beam_profiles.downsize_images(downsize)
+        if color_resolution is not None:
+            beam_profiles = beam_profiles.change_color_resolution(color_resolution)
         return beam_profiles.get_rounded_beam_profiles()
 
 

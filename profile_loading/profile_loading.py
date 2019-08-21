@@ -1,6 +1,5 @@
 import json_tools
 import numpy as np
-from contextlib import suppress
 
 
 def get_train_test_split_data(metadata_dict, label_name, path_to_data, runs=list(range(9))):
