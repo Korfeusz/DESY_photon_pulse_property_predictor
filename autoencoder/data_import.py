@@ -44,7 +44,7 @@ def get_train_test_split_data(data_storage_filename, metadata_dict, normalize, c
     if reshape:
         shape = profiles.shape
         profiles = np.reshape(profiles, (shape[0], shape[1], shape[2], 1))
-    return (profiles[mask], indices[mask]), (profiles[~mask], indices[~mask])
+    return (profiles[mask], indices[mask]), (profiles[~mask], indices[~mask]), (profiles, indices)
 
 
 def minmax_imagewise(profiles):
