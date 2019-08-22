@@ -7,6 +7,12 @@ import numpy as np
 from cnn.cnn_tools import lr_decay
 import json_tools
 
+
+def min_max_scale(train, test):
+    train_max = np.max(train)
+    train_min = np.min(test)
+    return (train - train_min)/(train_max - train_min), (test - train_min)/(train_max - train_min)
+
 if __name__ == '__main__':
     # (x_train, _), (x_test, _) = load_profiles()
     metadata_file = '../metadata/metadata_1.json'
@@ -18,6 +24,8 @@ if __name__ == '__main__':
         normalize=True,
         cut_to=final_shape, reshape=True)
 
+    # x_train, x_test = min_max_scale(x_train, x_test)
+
     input_img, encoded, decoded = get_autoencoder(x_train.shape[1:3])
     autoencoder = tf.keras.models.Model(input_img, decoded)
     autoencoder.summary()
@@ -25,12 +33,12 @@ if __name__ == '__main__':
     # autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
 
     autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.01),
-                        loss='binary_crossentropy')
+                        loss='mean_squared_error')
 
     lr_decay_callback = tf.keras.callbacks.LearningRateScheduler(lr_decay, verbose=True)
 
     autoencoder.fit(x_train, x_train,
-                    epochs=50,
+                    epochs=20,
                     batch_size=512,
                     shuffle=True,
                     validation_data=(x_test, x_test),
