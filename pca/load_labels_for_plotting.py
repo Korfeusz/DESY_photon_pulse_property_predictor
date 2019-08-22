@@ -8,3 +8,8 @@ def load_labels(metadata_dict, indices, label_name):
 def load_run_numbers(metadata_dict, indices):
     for index in indices:
         yield metadata_dict[index]['address']['run']
+
+
+def translate_run_labels(labels, translation):
+    return [translation[x] for x in labels]
+

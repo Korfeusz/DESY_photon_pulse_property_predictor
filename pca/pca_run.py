@@ -22,7 +22,7 @@ def plot_scatter(principal_components, labels, axes=(0, 1)):
     rgb = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv))
     for i, label in enumerate(set(labels)):
         mask = labels == label
-        plt.scatter(principal_components[mask, axes[0]], principal_components[mask, axes[1]], c=rgb[i], s=0.2, label=label)
+        plt.scatter(principal_components[mask, axes[0]], principal_components[mask, axes[1]], c=rgb[i], s=0.2, label=label, alpha=0.7)
 
     plt.legend(markerscale=10)
     plt.show()
@@ -52,15 +52,28 @@ if __name__ == '__main__':
     print(pca_model.explained_variance_ratio_)
 
 
-    model = tf.keras.models.load_model('../model/model_2_biased.h5')
-    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
-    profiles = profile_loading.get_beam_profiles_from_indices(data_storage_filename, sorted_indices=profile_indices)
-    predictions = model.predict_classes(profiles)
-    plot_scatter(principal_components, predictions)
+    # model = tf.keras.models.load_model('../model/model_2_biased.h5')
+    # data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
+    # profiles = profile_loading.get_beam_profiles_from_indices(data_storage_filename, sorted_indices=profile_indices)
+    # predictions = model.predict_classes(profiles)
+    # plot_scatter(principal_components, predictions)
 
-    labels = np.array(list(load_labels_for_plotting.load_run_numbers(metadata_dict, profile_indices)))
-    plot_scatter(principal_components, labels)
+    run_labels = np.array(list(load_labels_for_plotting.load_run_numbers(metadata_dict, profile_indices)))
+    plot_scatter(principal_components, run_labels)
 
+    undulator_translation = [9, 7, 6, 6, 7, 9, 9, 7, 6]
+    undulator_labels = np.array(load_labels_for_plotting.translate_run_labels(run_labels, undulator_translation))
+    plot_scatter(principal_components, undulator_labels)
+
+
+    electron_bunch_charge_translations = [0.3, 0.3, 0.3, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5]
+    electron_bunch_charge_labels = np.array(
+        load_labels_for_plotting.translate_run_labels(run_labels, electron_bunch_charge_translations))
+    plot_scatter(principal_components, electron_bunch_charge_labels)
+
+    energy_translation = [131, 100, 90, 46, 202, 238, 88, 34, 22]
+    energy_labels = np.array(load_labels_for_plotting.translate_run_labels(run_labels, energy_translation))
+    plot_scatter(principal_components, energy_labels)
 
     # plt.scatter(principal_components[~labels, 0], principal_components[~labels, 1], c='red', s=1)
     # plt.scatter(principal_components[labels, 0], principal_components[labels, 1], c='green', s=1, alpha=0.5)
