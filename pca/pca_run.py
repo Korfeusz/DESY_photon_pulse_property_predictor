@@ -52,11 +52,11 @@ if __name__ == '__main__':
     print(pca_model.explained_variance_ratio_)
 
 
-    # model = tf.keras.models.load_model('../model/model_2_biased.h5')
-    # data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
-    # profiles = profile_loading.get_beam_profiles_from_indices(data_storage_filename, sorted_indices=profile_indices)
-    # predictions = model.predict_classes(profiles)
-    # plot_scatter(principal_components, predictions)
+    model = tf.keras.models.load_model('../model/model_2_biased.h5')
+    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
+    profiles = profile_loading.get_beam_profiles_from_indices(data_storage_filename, sorted_indices=profile_indices)
+    predictions = model.predict_classes(profiles)
+    plot_scatter(principal_components, predictions)
 
     run_labels = np.array(list(load_labels_for_plotting.load_run_numbers(metadata_dict, profile_indices)))
     plot_scatter(principal_components, run_labels)
