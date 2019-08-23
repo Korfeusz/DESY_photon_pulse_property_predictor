@@ -13,13 +13,11 @@ if __name__ == '__main__':
                                                                 experiment_name=experiment_name)
     area_perimeter_entries = beam_profile_metadata.AreaPerimeterIndexEntries(binarisation_fractions=[0.3, 0.5, 0.7],
                                                                              experiment_name=experiment_name)
-
     worst_profiles, worst_indices = \
         beam_profile_metadata.get_profiles_labeled_1_with_worst_index(metadata_dict,
                                                                       area_perimeter_entries,
                                                                       number_to_find=100,
                                                                       show_number_of_labeled_1=True)
-
     print('worst index: {}'.format(worst_indices[-1]))
     print('worst profile: {}'.format(worst_profiles[-1]))
     images = imaging_tools.get_profiles_from_indices(worst_profiles,
