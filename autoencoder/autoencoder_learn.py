@@ -11,7 +11,8 @@ import json_tools
 def min_max_scale(train, test):
     train_max = np.max(train)
     train_min = np.min(test)
-    return (train - train_min)/(train_max - train_min), (test - train_min)/(train_max - train_min)
+    return (train - train_min) / (train_max - train_min), (test - train_min) / (train_max - train_min)
+
 
 if __name__ == '__main__':
     # (x_train, _), (x_test, _) = load_profiles()
@@ -39,7 +40,7 @@ if __name__ == '__main__':
 
     autoencoder.fit(x_train, x_train,
                     epochs=20,
-                    batch_size=512,
+                    batch_size=256,
                     shuffle=True,
                     validation_data=(x_test, x_test),
                     callbacks=[tf.keras.callbacks.TensorBoard(log_dir="../logs/autoencoder/"), lr_decay_callback])
@@ -61,4 +62,3 @@ if __name__ == '__main__':
                                     model_filename=model_save,
                                     indices=all_indices,
                                     encoder_file=encoder_save)
-

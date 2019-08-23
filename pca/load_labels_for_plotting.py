@@ -1,3 +1,5 @@
+import numpy as np
+
 
 def load_labels(metadata_dict, indices, label_name):
     for index in indices:
@@ -13,3 +15,6 @@ def load_run_numbers(metadata_dict, indices):
 def translate_run_labels(labels, translation):
     return [translation[x] for x in labels]
 
+
+def load_intensities(profiles):
+    return np.sum(np.sum(profiles, axis=2), axis=1)
