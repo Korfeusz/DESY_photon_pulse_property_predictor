@@ -1,7 +1,4 @@
 import beam_profile_metadata
-import json_tools
-import imaging_tools
-
 
 if __name__ == '__main__':
     metadata_file = 'metadata/metadata.json'
@@ -17,7 +14,7 @@ if __name__ == '__main__':
         .add_labels_by_threshold(threshold=0.45, circularity_entries=area_perimeter_entries) \
         .add_labels_by_combination(circularity_entries_1=masking_entries,
                                    circularity_entries_2=area_perimeter_entries,
-                                   label_name='experimental_combo') \
-        .add_train_test_split(number_to_take=10000, label_name='experimental_combo', ratio_of_train=0.8,
+                                   label_name='combination_label') \
+        .add_train_test_split(number_to_take=10000, label_name='combination_label', ratio_of_train=0.8,
                               ratio_of_1s=0.2) \
         .dump_metadata_to_json(filename=metadata_file, indent=2)

@@ -9,8 +9,8 @@ if __name__ == '__main__':
     metadata_dict = json_tools.import_json_as_dict('metadata/metadata.json')
 
     label_name = 'combination_label'
-    path_to_profiles = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy',
-
+    path_to_profiles = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
+    save_model_as = 'model/model_main_less_epochs.h5'
     (x_train, y_train), (x_test, y_test) = cnn.save_and_load_profiles.load_train_test_split_data(data_save_directory,
                                                                                                  metadata_dict,
                                                                                                  label_name,
@@ -31,8 +31,8 @@ if __name__ == '__main__':
     log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
     history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch,
-                        epochs=25,
+                        epochs=8,
                         validation_data=(x_test, y_test_1h), validation_steps=1,
                         callbacks=[lr_decay_callback, tensorboard_callback])
 
-    model.save('../model/model_2_biased.h5')
+    model.save(save_model_as)

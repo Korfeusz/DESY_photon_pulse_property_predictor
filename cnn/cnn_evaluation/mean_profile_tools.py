@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 def get_profiles_labeled_1(predictions, data):
     return data[predictions, :, :]
 
+
 def get_profiles_labeled_0(predictions, data):
     return data[~predictions, :, :]
+
 
 def create_mean_profile(data):
     return np.mean(data, axis=0)

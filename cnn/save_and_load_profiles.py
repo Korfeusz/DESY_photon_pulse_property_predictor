@@ -28,7 +28,7 @@ def save_and_return_profiles(save_directory, metadata_dict, label_name, path_to_
 
 def load_profiles(directory):
     x_train = np.load('{}/x_train.npy'.format(directory))
-    x_test = np.load('{}/x_test.npy'.format(directory) )
+    x_test = np.load('{}/x_test.npy'.format(directory))
     y_train = np.load('{}/y_train.npy'.format(directory))
     y_test = np.load('{}/y_test.npy'.format(directory))
     return (x_train, y_train), (x_test, y_test)

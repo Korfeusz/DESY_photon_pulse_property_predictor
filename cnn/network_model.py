@@ -19,12 +19,6 @@ def get_model(image_shape):
 
                 tf.keras.layers.Dropout(0.5),
 
-                # tf.keras.layers.Conv2D(kernel_size=6, filters=32, use_bias=False, padding='same', strides=2),
-                # tf.keras.layers.BatchNormalization(center=True, scale=False),
-                # tf.keras.layers.Activation('relu'),
-                #
-                # tf.keras.layers.Dropout(0.5),
-
                 tf.keras.layers.Flatten(),
 
                 tf.keras.layers.Dense(20, use_bias=False),
