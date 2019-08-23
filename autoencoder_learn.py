@@ -12,16 +12,17 @@ def lr_decay(epoch):
 
 
 if __name__ == '__main__':
-    metadata_file = '../metadata/metadata_1.json'
-    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
+    metadata_file = 'metadata/metadata.json'
+    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data_2/beam_profiles_run_{}_raw_downsized.npy'
     final_shape = (32, 32)
-    model_name = 'test_autoencoder'
+    model_name = 'autoencoder_tst'
     codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}.npy'.format(model_name)
-    model_save = '../model/{}.h5'.format(model_name)
-    encoder_save = '../model/{}_encoder.h5'.format(model_name)
-    log_dir = '../logs/autoencoder/'
+    model_save = 'model/{}.h5'.format(model_name)
+    encoder_save = 'model/{}_encoder.h5'.format(model_name)
+    log_dir = 'logs/autoencoder/'
 
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
+    create_autoencoder_label(data_storage_filename, metadata_file, fraction_of_train=0.8)
 
     (x_train, train_indices), (x_test, test_indices), (all_profiles, all_indices) = get_train_test_split_data(
         data_storage_filename, metadata_dict,
@@ -46,7 +47,7 @@ if __name__ == '__main__':
     decoded_images = autoencoder.predict(x_test)
     visualise_results(x_test, decoded_images, n=10)
 
-    create_autoencoder_label(data_storage_filename, metadata_file, fraction_of_train=0.8)
+
     encoder = tf.keras.models.Model(input_img, encoded)
     encoded_images = encoder.predict(all_profiles)
     np.save(codes_save, encoded_images)
