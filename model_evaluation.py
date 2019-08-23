@@ -1,6 +1,7 @@
 from cnn import cnn_evaluation
 import json_tools
 import numpy as np
+
 if __name__ == '__main__':
     metadata_dict = json_tools.import_json_as_dict('metadata/metadata_1.json')
     model = 'model/model_2_biased.h5'

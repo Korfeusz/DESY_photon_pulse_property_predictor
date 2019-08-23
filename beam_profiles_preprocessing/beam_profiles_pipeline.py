@@ -52,4 +52,3 @@ class BeamProfilesPipeline:
     def downsize_images(self, factor):
         data = skimage.transform.downscale_local_mean(self.beam_profile_data, factors=(1, factor, factor))
         return BeamProfilesPipeline(data, self.color_resolution)
-

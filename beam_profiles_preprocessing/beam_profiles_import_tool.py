@@ -9,7 +9,7 @@ def get_beam_profiles_from_dict(run_input):
             .get_beam_profiles_pipeline(current_run=current_run, profiles_list=run_input['profiles_range']) \
             .slice_horizontally(h_min=run_input['slice']['horizontal']['min'],
                                 h_max=run_input['slice']['horizontal']['max']) \
-            .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max']) \
+            .slice_vertically(v_min=run_input['slice']['vertical']['min'], v_max=run_input['slice']['vertical']['max'])\
             .remove_background_by_intensity_fraction(cut_off_level=run_input['background_cut_off']) \
             .opening() \
             .rescale_images(horizontal_scale=run_input['horizontal_scaling_factor'])
