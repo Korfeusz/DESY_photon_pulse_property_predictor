@@ -1,10 +1,11 @@
-import json_tools
 import numpy as np
 
 
 def get_train_test_split_data(metadata_dict, label_name, path_to_data, runs=list(range(9))):
-    labels_and_profiles_train = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='train', runs=runs)
-    labels_and_profiles_test = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='test', runs=runs)
+    labels_and_profiles_train = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='train',
+                                                             runs=runs)
+    labels_and_profiles_test = get_labels_and_profiles_list(metadata_dict, label_name=label_name, assignment='test',
+                                                            runs=runs)
     return get_x_y_data(labels_and_profiles_train, path_to_data), get_x_y_data(labels_and_profiles_test, path_to_data)
 
 
@@ -41,6 +42,7 @@ def insert_new_profiles_to_placeholder(beam_profiles, access_dict, image_index, 
 def get_x_y_data(labels_and_profiles, path_to_data):
     labels = []
     image_index = 0
+    images = None
     for run_number, access_dict in enumerate(labels_and_profiles):
         beam_profiles = np.load(path_to_data.format(run_number))
         if run_number == 0:
@@ -48,12 +50,3 @@ def get_x_y_data(labels_and_profiles, path_to_data):
         labels.extend(access_dict['labels'])
         image_index = insert_new_profiles_to_placeholder(beam_profiles, access_dict, image_index, images)
     return images, np.array(labels)
-
-
-
-
-if __name__ == '__main__':
-    metadata_dict = json_tools.import_json_as_dict('metadata/meta_test_1.json')
-    (x_train, y_train), (x_test, y_test) = get_train_test_split_data(metadata_dict, label_name='experimental_combo',
-                                                                     path_to_data='preprocessed_data/beam_profiles_run_{}_raw_small.npy',
-                                                                     runs=[0, 1, 2, 3])

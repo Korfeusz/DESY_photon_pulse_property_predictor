@@ -4,6 +4,7 @@ from beam_profile_metadata import beam_profile_metadata_tools
 from json_tools import json_tools
 from beam_profiles_preprocessing import beam_profiles_import_tool
 
+
 def save_beam_profile_image(beam_profile, name='save_test.png'):
     plt.imsave(name,
                beam_profile,

@@ -1,5 +1,6 @@
 import numpy as np
-import skimage.measure, skimage.filters
+import skimage.measure
+import skimage.filters
 from image_manipulation_tools import binarisation_tools
 
 

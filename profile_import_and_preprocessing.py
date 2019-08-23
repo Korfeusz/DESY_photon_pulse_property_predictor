@@ -14,14 +14,17 @@ if __name__ == '__main__':
         # beam_profiles = beam_profiles_preprocessing.get_beam_profiles_from_dict(run_input)
         # beam_profiles_raw = beam_profiles_preprocessing.get_raw_beam_profiles_from_dict(run_input)
         downsized_raw_beam_profiles = beam_profiles_preprocessing.get_raw_beam_profiles_from_dict(run_input, downsize=8)
-        downsized_lowcolor_raw_beam_profiles = beam_profiles_preprocessing.get_raw_beam_profiles_from_dict(run_input,
-                                                                                                                    downsize=16,
-                                                                                                                    color_resolution=15)
-        # np.save('{}/{}/beam_profiles_run_{}_raw'.format('/beegfs/desy/user/brockhul', 'preprocessed_data', run_number), beam_profiles_raw)
-        # np.save('{}/{}/beam_profiles_run_{}'.format('/beegfs/desy/user/brockhul', 'preprocessed_data', run_number), beam_profiles)
-        np.save('{}/{}/beam_profiles_run_{}_raw_lowcolor_downsized'.format('/beegfs/desy/user/brockhul', 'preprocessed_data',
-                                                                  run_number), downsized_lowcolor_raw_beam_profiles)
-
+        downsized_lowcolor_raw_beam_profiles = \
+            beam_profiles_preprocessing.get_raw_beam_profiles_from_dict(run_input,
+                                                                        downsize=16,
+                                                                        color_resolution=15)
+        # np.save('{}/{}/beam_profiles_run_{}_raw'.format('/beegfs/desy/user/brockhul', 'preprocessed_data',
+        # run_number), beam_profiles_raw) np.save('{}/{}/beam_profiles_run_{}'.format('/beegfs/desy/user/brockhul',
+        # 'preprocessed_data', run_number), beam_profiles)
+        np.save('{}/{}/beam_profiles_run_{}_raw_lowcolor_downsized'.format('/beegfs/desy/user/brockhul',
+                                                                           'preprocessed_data',
+                                                                           run_number),
+                downsized_lowcolor_raw_beam_profiles)
 
         imaging_tools.show_beam_profile(downsized_lowcolor_raw_beam_profiles, 1000)
         imaging_tools.show_beam_profile(downsized_raw_beam_profiles, 1000)

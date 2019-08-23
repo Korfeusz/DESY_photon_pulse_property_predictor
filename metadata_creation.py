@@ -7,7 +7,8 @@ if __name__ == '__main__':
     metadata_file = 'metadata/metadata.json'
     for run_number in run_numbers:
         print('Started metadata analysis for run {}'.format(run_number))
-        beam_profiles = np.load('/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}.npy'.format(run_number))
+        beam_profiles = np.load('/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}.npy'
+                                .format(run_number))
         sums = np.sum(np.sum(beam_profiles, axis=2), axis=1)
         run_input = json_tools.import_json_as_dict('run_inputs/run_input_{}.json'.format(run_number))
         masking_entries = beam_profile_metadata.MaskingIndexEntries(ring_thickness=10, number_of_tests=2,
