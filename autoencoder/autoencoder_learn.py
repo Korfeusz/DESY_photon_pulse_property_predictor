@@ -42,7 +42,7 @@ if __name__ == '__main__':
                     batch_size=512,
                     shuffle=True,
                     validation_data=(x_test, x_test),
-                    callbacks=[tf.keras.callbacks.TensorBoard(log_dir="../logs/autoencoder/")])
+                    callbacks=[tf.keras.callbacks.TensorBoard(log_dir="../logs/autoencoder/"), lr_decay_callback])
 
     decoded_images = autoencoder.predict(x_test)
 
