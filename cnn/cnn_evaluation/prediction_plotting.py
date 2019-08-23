@@ -1,6 +1,6 @@
 import numpy as np
 import imaging_tools
-from cnn_evaluation import prediction_tools
+from cnn.cnn_evaluation import prediction_tools
 from profile_loading import uncorrupted_profile_loading
 import matplotlib.pyplot as plt
 

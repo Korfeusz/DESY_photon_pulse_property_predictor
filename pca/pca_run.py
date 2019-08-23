@@ -67,7 +67,7 @@ if __name__ == '__main__':
     principal_components = pca_model.fit_transform(codes)
     print(pca_model.explained_variance_ratio_)
 
-    save_dir = '../pca_plots/r3/{}'
+    save_dir = '../pca_plots/r0/{}'
 
     model = tf.keras.models.load_model('../model/model_2_biased.h5')
     data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                  title='PCA with predicted circularity labels', save=save_dir.format('circularity'))
 
     run_labels = np.array(list(load_labels_for_plotting.load_run_numbers(metadata_dict, profile_indices)))
-    plot_scatter(principal_components, run_labels, axes=(0, 1), title='PCA with run numbers')
+    plot_scatter(principal_components, run_labels, axes=(0, 1), title='PCA with run numbers', save=save_dir.format('runs'))
 
     undulator_translation = [9, 7, 6, 6, 7, 9, 9, 7, 6]
     undulator_labels = np.array(load_labels_for_plotting.translate_run_labels(run_labels, undulator_translation))
