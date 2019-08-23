@@ -1,5 +1,5 @@
 import random
-from beam_profile_metadata import dictionary_tools
+from beam_profile_metadata.tools import dictionary_tools
 
 
 def generate_profiles_by_label_name(metadata_dict, label_name):

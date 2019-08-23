@@ -1,5 +1,5 @@
 from beam_profile_metadata.circularity_index_entries import CircularityIndexEntries
-from beam_profile_metadata import dictionary_tools
+from beam_profile_metadata.tools import dictionary_tools
 
 
 def label_by_threshold(metadata_dict, circularity_entries: CircularityIndexEntries, threshold):
