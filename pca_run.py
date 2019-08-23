@@ -20,11 +20,11 @@ if __name__ == '__main__':
 
     save_dir = '../pca_plots/r0/{}'
 
-    model = tf.keras.models.load_model('model/model_main.h5')
+    model = tf.keras.models.load_model('model/model_main_less_epochs.h5')
     data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
     profiles = profile_loading.get_beam_profiles_from_indices(data_storage_filename, sorted_indices=profile_indices)
     predictions = model.predict_classes(profiles)
-    predictions = np.array([0 if x == 1 else 1 for x in predictions])
+    predictions = np.array(['Gaussian' if x == 1 else 'Higher Order' for x in predictions])
     plot_scatter(principal_components, predictions, axes=(0, 1),
                  title='PCA with predicted order labels')#, save=save_dir.format('circularity'))
 

@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     BATCH_SIZE = 64
     steps_per_epoch = x_train.shape[0] // BATCH_SIZE
-    log_dir = "../logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
     history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch,
                         epochs=8,
