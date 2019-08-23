@@ -1,38 +1,36 @@
 import tensorflow as tf
 from autoencoder.model import get_autoencoder
-from autoencoder.data_import import get_train_test_split_data
-from autoencoder.autoencoder_visualisation import visualise_random_results
+from autoencoder.data_import import get_train_test_split_data, create_autoencoder_label
+from autoencoder.autoencoder_visualisation import visualise_results
 from autoencoder.run_saving import add_autoencoder_run_to_metadata
 import numpy as np
-from cnn.cnn_tools import lr_decay
 import json_tools
 
 
-def min_max_scale(train, test):
-    train_max = np.max(train)
-    train_min = np.min(test)
-    return (train - train_min) / (train_max - train_min), (test - train_min) / (train_max - train_min)
+def lr_decay(epoch):
+    return 0.01 * np.power(0.95, epoch)
 
 
 if __name__ == '__main__':
-    # (x_train, _), (x_test, _) = load_profiles()
     metadata_file = '../metadata/metadata_1.json'
-    metadata_dict = json_tools.import_json_as_dict(metadata_file)
     data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
     final_shape = (32, 32)
+    model_name = 'test_autoencoder'
+    codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}.npy'.format(model_name)
+    model_save = '../model/{}.h5'.format(model_name)
+    encoder_save = '../model/{}_encoder.h5'.format(model_name)
+    log_dir = '../logs/autoencoder/'
+
+    metadata_dict = json_tools.import_json_as_dict(metadata_file)
+
     (x_train, train_indices), (x_test, test_indices), (all_profiles, all_indices) = get_train_test_split_data(
         data_storage_filename, metadata_dict,
         normalize=True,
         cut_to=final_shape, reshape=True)
 
-    # x_train, x_test = min_max_scale(x_train, x_test)
-
     input_img, encoded, decoded = get_autoencoder(x_train.shape[1:3])
     autoencoder = tf.keras.models.Model(input_img, decoded)
     autoencoder.summary()
-
-    # autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
-
     autoencoder.compile(optimizer=tf.keras.optimizers.Adam(lr=0.01),
                         loss='mean_squared_error')
 
@@ -43,16 +41,12 @@ if __name__ == '__main__':
                     batch_size=512,
                     shuffle=True,
                     validation_data=(x_test, x_test),
-                    callbacks=[tf.keras.callbacks.TensorBoard(log_dir="../logs/autoencoder/"), lr_decay_callback])
+                    callbacks=[tf.keras.callbacks.TensorBoard(log_dir=log_dir), lr_decay_callback])
 
     decoded_images = autoencoder.predict(x_test)
+    visualise_results(x_test, decoded_images, n=10)
 
-    visualise_random_results(x_test, decoded_images, n=10)
-
-    model_name = 'test_autoencoder'
-    codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}.npy'.format(model_name)
-    model_save = '../model/{}.h5'.format(model_name)
-    encoder_save = '../model/{}_encoder.h5'.format(model_name)
+    create_autoencoder_label(data_storage_filename, metadata_file, fraction_of_train=0.8)
     encoder = tf.keras.models.Model(input_img, encoded)
     encoded_images = encoder.predict(all_profiles)
     np.save(codes_save, encoded_images)
