@@ -40,7 +40,7 @@ if __name__ == '__main__':
 
     autoencoder.fit(x_train, x_train,
                     epochs=20,
-                    batch_size=256,
+                    batch_size=512,
                     shuffle=True,
                     validation_data=(x_test, x_test),
                     callbacks=[tf.keras.callbacks.TensorBoard(log_dir="../logs/autoencoder/"), lr_decay_callback])

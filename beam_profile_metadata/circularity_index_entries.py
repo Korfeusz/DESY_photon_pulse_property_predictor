@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from circle_finding_tools import masking_method_circle_finding_tool, area_perimeter_circle_finding_tool
+from beam_profile_metadata.gaussian_finding_tools import masking_method_circle_finding_tool, area_perimeter_circle_finding_tool
 
 
 class CircularityIndexEntries(ABC):

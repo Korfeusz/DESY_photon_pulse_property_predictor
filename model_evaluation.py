@@ -1,5 +1,4 @@
-import cnn_evaluation
-import cnn
+from cnn import cnn_evaluation
 import json_tools
 import numpy as np
 if __name__ == '__main__':
@@ -7,7 +6,7 @@ if __name__ == '__main__':
     model = 'model/model_2_biased.h5'
     data_storage_filename='/beegfs/desy/user/brockhul/preprocessed_data/beam_profiles_run_{}_raw_downsized.npy'
     all_data = cnn_evaluation.get_all_uncorrupted_beam_profiles(data_storage_filename=data_storage_filename,
-                                                   metadata_dict=metadata_dict)
+                                                                metadata_dict=metadata_dict)
 
     print(all_data.shape)
     # (_, _), (x_test, y_test) = cnn.save_and_load_profiles.load_profiles()
@@ -18,13 +17,13 @@ if __name__ == '__main__':
     #                                             metadata_dict=metadata_dict,
     #                                             model_file=model)
 
-    profiles_labeled_1 = cnn_evaluation.mean_profile_tools.get_profiles_labeled_1(predictions, all_data)
-    mean_profile_1 = cnn_evaluation.mean_profile_tools.create_mean_profile(data=profiles_labeled_1)
-    fit_1 = cnn_evaluation.mean_profile_tools.fit_gaussian_to_profile(mean_profile_1)
+    profiles_labeled_1 = cnn.cnn_evaluation.mean_profile_tools.get_profiles_labeled_1(predictions, all_data)
+    mean_profile_1 = cnn.cnn_evaluation.mean_profile_tools.create_mean_profile(data=profiles_labeled_1)
+    fit_1 = cnn.cnn_evaluation.mean_profile_tools.fit_gaussian_to_profile(mean_profile_1)
 
-    profiles_labeled_0 = cnn_evaluation.mean_profile_tools.get_profiles_labeled_0(predictions, all_data)
-    mean_profile_0 = cnn_evaluation.mean_profile_tools.create_mean_profile(data=profiles_labeled_0)
-    fit_0 = cnn_evaluation.mean_profile_tools.fit_gaussian_to_profile(mean_profile_0)
+    profiles_labeled_0 = cnn.cnn_evaluation.mean_profile_tools.get_profiles_labeled_0(predictions, all_data)
+    mean_profile_0 = cnn.cnn_evaluation.mean_profile_tools.create_mean_profile(data=profiles_labeled_0)
+    fit_0 = cnn.cnn_evaluation.mean_profile_tools.fit_gaussian_to_profile(mean_profile_0)
 
 
 
