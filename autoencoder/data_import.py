@@ -1,5 +1,5 @@
 import profile_loading
-from beam_profile_metadata import dictionary_tools
+from beam_profile_metadata.tools import dictionary_tools
 import numpy as np
 import json_tools
 
