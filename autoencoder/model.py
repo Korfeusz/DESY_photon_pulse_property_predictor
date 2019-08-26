@@ -13,12 +13,12 @@ def get_autoencoder(image_shape):
     # x = tf.keras.layers.MaxPooling2D((2, 2), padding='same')(x)
     # x = tf.keras.layers.BatchNormalization(center=True, scale=True)(x)
 
-    x = tf.keras.layers.Conv2D(8, (3, 3), activation='relu', padding='same')(x)
+    x = tf.keras.layers.Conv2D(4, (3, 3), activation='relu', padding='same')(x)
     x = tf.keras.layers.MaxPooling2D((2, 2), padding='same')(x)
     encoded = tf.keras.layers.BatchNormalization(center=True, scale=True)(x)
 
 
-    x = tf.keras.layers.Conv2D(8, (3, 3), activation='relu', padding='same')(encoded)
+    x = tf.keras.layers.Conv2D(4, (3, 3), activation='relu', padding='same')(encoded)
     x = tf.keras.layers.UpSampling2D((2, 2))(x)
     x = tf.keras.layers.BatchNormalization(center=True, scale=True)(x)
 

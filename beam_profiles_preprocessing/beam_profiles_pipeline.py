@@ -1,4 +1,4 @@
-from beam_profiles_preprocessing import constants
+import constants
 import numpy as np
 import image_manipulation_tools
 import skimage

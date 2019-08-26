@@ -10,7 +10,7 @@ if __name__ == '__main__':
 
     label_name = 'combination_label'
     path_to_profiles = '/beegfs/desy/user/brockhul/preprocessed_data_2/beam_profiles_run_{}_raw_downsized.npy'
-    save_model_as = 'model/model_main_less_epochs.h5'
+    save_model_as = 'model/model_less_in_dense.h5'
     (x_train, y_train), (x_test, y_test) = cnn.save_and_load_profiles.load_train_test_split_data(data_save_directory,
                                                                                                  metadata_dict,
                                                                                                  label_name,

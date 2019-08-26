@@ -39,14 +39,13 @@ if __name__ == '__main__':
 
     autoencoder.fit(x_train, x_train,
                     epochs=20,
-                    batch_size=256,
+                    batch_size=512,
                     shuffle=True,
                     validation_data=(x_test, x_test),
                     callbacks=[tf.keras.callbacks.TensorBoard(log_dir=log_dir), lr_decay_callback])
 
     decoded_images = autoencoder.predict(x_test)
     visualise_results(x_test, decoded_images, n=10)
-
 
     encoder = tf.keras.models.Model(input_img, encoded)
     encoded_images = encoder.predict(all_profiles)

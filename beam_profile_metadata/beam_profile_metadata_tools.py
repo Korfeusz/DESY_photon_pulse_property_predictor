@@ -1,6 +1,6 @@
 from beam_profile_metadata import beam_profile_metadata_writer
 from json_tools import json_tools
-from beam_profiles_preprocessing import constants
+import constants
 
 
 def get_metadata_writer(beam_profiles, run_input, metadata_filename):

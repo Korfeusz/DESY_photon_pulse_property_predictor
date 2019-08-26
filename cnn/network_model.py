@@ -21,7 +21,7 @@ def get_model(image_shape):
 
                 tf.keras.layers.Flatten(),
 
-                tf.keras.layers.Dense(20, use_bias=False),
+                tf.keras.layers.Dense(10, use_bias=False),
                 tf.keras.layers.BatchNormalization(center=True, scale=False),
                 tf.keras.layers.Activation('relu'),
 

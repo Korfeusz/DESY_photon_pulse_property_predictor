@@ -4,7 +4,7 @@ from matplotlib import cm as cm, pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def plot_scatter(principal_components, labels, axes=(0, 1), title=None, sort_colors=False, save=None):
+def plot_scatter(principal_components, labels, explained_variance=(0, 0), axes=(0, 1), title=None, sort_colors=False, save=None):
     n = len(set(labels))
     rgb = cm.rainbow(np.linspace(0.0, 1.0, n))
     if sort_colors:
@@ -16,18 +16,22 @@ def plot_scatter(principal_components, labels, axes=(0, 1), title=None, sort_col
                     label=label, alpha=0.5)
 
     plt.title(title)
+    plt.xlabel('PCA1({:.1f}%)'.format(explained_variance[0] * 100))
+    plt.ylabel('PCA2({:.1f}%)'.format(explained_variance[1] * 100))
     plt.legend(markerscale=30)
     if save is not None:
         plt.savefig(save)
     plt.show()
 
 
-def plot_scatter_continuous(principal_components, continuous_labels, title=None, save=None):
+def plot_scatter_continuous(principal_components, continuous_labels, explained_variance=(0, 0), title=None, save=None):
     rgb = cm.rainbow(np.linspace(0.0, 1.0, len(continuous_labels)))
-    sorting_dict = dict([(x, y) for x, y in zip(sorted(continuous_labels), range(len(continuous_labels)))])
-    rgb = [rgb[sorting_dict[x]] for x in continuous_labels]
+    sorting_dict = {x: y for x, y in zip(sorted(continuous_labels), rgb)}
+    rgb = [sorting_dict[x] for x in continuous_labels]
     plt.scatter(principal_components[:, 0], principal_components[:, 1], c=rgb, s=0.2)
     plt.title(title)
+    plt.xlabel('PCA1({:.1f}%)'.format(explained_variance[0] * 100))
+    plt.ylabel('PCA2({:.1f}%)'.format(explained_variance[1] * 100))
     if save is not None:
         plt.savefig(save)
     plt.show()
