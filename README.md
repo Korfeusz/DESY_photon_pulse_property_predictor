@@ -7,9 +7,9 @@ The main purpose of this code is the analysis of beam profiles taken at DESY's F
 1. Determining the Gaussianeity of the profiles using computer vision and machine learning.
 2. Reduction of dimensions for analysis of the beam profiles in terms of machine settings, Gaussianeity and other labels.
 
-## Subdivision
+## Division
 
-The project can be subdivided into:
+The project can be divided into:
 
 1. An import tool for loading the profiles from .h5 files.
 2. A tool for Metadata creation and saving for the imported profiles.

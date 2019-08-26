@@ -1,13 +1,14 @@
 import numpy as np
 import beam_profile_metadata
 import json_tools
+import constants
 
 if __name__ == '__main__':
     run_numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    metadata_file = 'metadata/metadata.json'
-    data_file_name = '/beegfs/desy/user/brockhul/preprocessed_data_2/beam_profiles_run_{}.npy'
-    run_inputs_file = 'run_inputs/run_input_{}.json'
-    experiment_name = '0'
+    metadata_file = constants.metadata_file
+    data_file_name = constants.preprocessed_beam_profiles_directory + '/beam_profiles_run_{}.npy'
+    run_inputs_file = constants.run_input_file_template
+    experiment_name = constants.experiment_name
 
     masking_entries = beam_profile_metadata.MaskingIndexEntries(ring_thickness=10, number_of_tests=2,
                                                                 experiment_name=experiment_name)

@@ -1,9 +1,11 @@
 import beam_profile_metadata
+import constants
 
 if __name__ == '__main__':
-    metadata_file = 'metadata/metadata.json'
-    experiment_name = '0'
-    run_inputs_file = 'metadata/run_inputs.json'
+    metadata_file = constants.metadata_file
+    experiment_name = constants.experiment_name
+    run_inputs_file = constants.run_inputs_save_file
+
     masking_entries = beam_profile_metadata.MaskingIndexEntries(ring_thickness=10, number_of_tests=2,
                                                                 experiment_name=experiment_name)
     area_perimeter_entries = beam_profile_metadata.AreaPerimeterIndexEntries(binarisation_fractions=[0.3, 0.5, 0.7],

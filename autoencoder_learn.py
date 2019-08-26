@@ -5,21 +5,22 @@ from autoencoder.autoencoder_visualisation import visualise_results
 from autoencoder.run_saving import add_autoencoder_run_to_metadata
 import numpy as np
 import json_tools
-
+import constants
 
 def lr_decay(epoch):
     return 0.01 * np.power(0.95, epoch)
 
 
 if __name__ == '__main__':
-    metadata_file = 'metadata/metadata.json'
-    data_storage_filename = '/beegfs/desy/user/brockhul/preprocessed_data_2/beam_profiles_run_{}_raw_downsized.npy'
+    metadata_file = constants.metadata_file
+    data_storage_filename = constants.preprocessed_beam_profiles_directory +  'beam_profiles_run_{}_raw_downsized.npy'
     final_shape = (32, 32)
-    model_name = 'autoencoder_tst'
-    codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}.npy'.format(model_name)
-    model_save = 'model/{}.h5'.format(model_name)
-    encoder_save = 'model/{}_encoder.h5'.format(model_name)
-    log_dir = 'logs/autoencoder/'
+    model_name = constants.autoencoder_model_name
+    codes_save = constants.autoencoder_codes_save
+    model_save = constants.autoencoder_model_save
+    encoder_save = constants.encoder_save
+    log_dir = constants.autoencoder_log_dir
+
 
     metadata_dict = json_tools.import_json_as_dict(metadata_file)
     create_autoencoder_label(data_storage_filename, metadata_file, fraction_of_train=0.8)

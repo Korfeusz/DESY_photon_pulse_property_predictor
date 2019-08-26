@@ -2,15 +2,16 @@ import tensorflow as tf
 import datetime
 import cnn
 import json_tools
+import constants
 
 
 if __name__ == '__main__':
-    data_save_directory='/beegfs/desy/user/brockhul/cnn_train_test_split_data/'
-    metadata_dict = json_tools.import_json_as_dict('metadata/metadata.json')
+    data_save_directory= constants.cnn_train_test_split_data_directory
+    metadata_dict = json_tools.import_json_as_dict(constants.metadata_file)
 
     label_name = 'combination_label'
-    path_to_profiles = '/beegfs/desy/user/brockhul/preprocessed_data_2/beam_profiles_run_{}_raw_downsized.npy'
-    save_model_as = 'model/model_less_in_dense.h5'
+    path_to_profiles = constants.preprocessed_beam_profiles_directory + 'beam_profiles_run_{}_raw_downsized.npy'
+    save_model_as = constants.cnn_model_saveas
     (x_train, y_train), (x_test, y_test) = cnn.save_and_load_profiles.load_train_test_split_data(data_save_directory,
                                                                                                  metadata_dict,
                                                                                                  label_name,
@@ -28,7 +29,7 @@ if __name__ == '__main__':
 
     BATCH_SIZE = 64
     steps_per_epoch = x_train.shape[0] // BATCH_SIZE
-    log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+    log_dir = constants.cnn_log_dir + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir)
     history = model.fit(x_train, y_train_1h, batch_size=BATCH_SIZE, steps_per_epoch=steps_per_epoch,
                         epochs=8,
