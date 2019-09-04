@@ -25,7 +25,7 @@ The project can be divided into:
 To use please make sure that all the packages from the requirements.txt file are installed.
 
 ## Example metadata json:
-`
+``` json
  "0_1": {
     "address": {
       "run": 0,
@@ -78,10 +78,10 @@ To use please make sure that all the packages from the requirements.txt file are
       "code_index": 1
     }
   },
- `
+ ```
  ## Example run input json:
  
- `
+ ``` json
  {
     "experiment_name": "0",
     "profiles_range": 0,
@@ -104,4 +104,4 @@ To use please make sure that all the packages from the requirements.txt file are
         "fraction": 0.8
     }
 }
- `
+ ```
