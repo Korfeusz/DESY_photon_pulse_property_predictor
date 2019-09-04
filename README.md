@@ -24,3 +24,84 @@ The project can be divided into:
 
 To use please make sure that all the packages from the requirements.txt file are installed.
 
+## Example metadata json:
+`
+ "0_1": {
+    "address": {
+      "run": 0,
+      "profile_number": 1
+    },
+    "corrupted": false,
+    "circularity_index": {
+      "run_name_0_masking_settings_10_2": {
+        "type": "area_perimeter",
+        "settings": {
+          "ring_thickness": 10,
+          "number_of_tests": 2
+        },
+        "pipeline_settings_name": "0",
+        "value": 0.294592246161292
+      },
+      "run_name_0_area_perimeter_settings_3_5_7": {
+        "type": "area_perimeter",
+        "settings": [
+          0.3,
+          0.5,
+          0.7
+        ],
+        "pipeline_settings_name": "0",
+        "value": 0.7557831967788516
+      }
+    },
+    "label": {
+      "run_name_0_masking_settings_10_2": {
+        "value": 0,
+        "threshold": 0.19
+      },
+      "run_name_0_area_perimeter_settings_3_5_7": {
+        "value": 0,
+        "threshold": 0.45
+      },
+      "experimental_combo": {
+        "value": 0
+      },
+      "combination_label": {
+        "value": 0
+      }
+    },
+    "train_test": "unused",
+    "autoencoder": {
+      "train_test": "train",
+      "model_file": "model/autoencoder_tst_1.h5",
+      "code_file": "/beegfs/desy/user/brockhul/autoencoder_codes/autoencoder_tst_1.npy",
+      "encoder_file": "model/autoencoder_tst_1_encoder.h5",
+      "code_index": 1
+    }
+  },
+ `
+ ## Example run input json:
+ 
+ `
+ {
+    "experiment_name": "0",
+    "profiles_range": 0,
+    "slice": {
+        "horizontal": {
+            "min": 105,
+            "max": 364
+        },
+        "vertical": {
+            "min": 90,
+            "max": 349
+        }
+    },
+    "final_color_resolution": 63,
+    "run_number": 2,
+    "background_cut_off": 0.6,
+    "horizontal_scaling_factor": 1.2,
+    "shifting": {
+        "type": "highest_intensity",
+        "fraction": 0.8
+    }
+}
+ `
