@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 
 
 def get_profiles_labeled_1(predictions, data):
-    return data[predictions, :, :]
+    return data[predictions.astype(bool), :, :]
 
 
 def get_profiles_labeled_0(predictions, data):
-    return data[~predictions, :, :]
+    return data[~predictions.astype(bool), :, :]
 
 
 def create_mean_profile(data):

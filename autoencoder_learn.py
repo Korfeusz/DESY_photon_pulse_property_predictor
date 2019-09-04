@@ -13,7 +13,7 @@ def lr_decay(epoch):
 
 if __name__ == '__main__':
     metadata_file = constants.metadata_file
-    data_storage_filename = constants.preprocessed_beam_profiles_directory +  'beam_profiles_run_{}_raw_downsized.npy'
+    data_storage_filename = constants.preprocessed_beam_profiles_directory +  '/beam_profiles_run_{}_raw_downsized.npy'
     final_shape = (32, 32)
     model_name = constants.autoencoder_model_name
     codes_save = constants.autoencoder_codes_save

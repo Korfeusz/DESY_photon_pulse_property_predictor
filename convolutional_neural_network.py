@@ -10,7 +10,7 @@ if __name__ == '__main__':
     metadata_dict = json_tools.import_json_as_dict(constants.metadata_file)
 
     label_name = 'combination_label'
-    path_to_profiles = constants.preprocessed_beam_profiles_directory + 'beam_profiles_run_{}_raw_downsized.npy'
+    path_to_profiles = constants.preprocessed_beam_profiles_directory + '/beam_profiles_run_{}_raw_downsized.npy'
     save_model_as = constants.cnn_model_saveas
     (x_train, y_train), (x_test, y_test) = cnn.save_and_load_profiles.load_train_test_split_data(data_save_directory,
                                                                                                  metadata_dict,
@@ -24,7 +24,7 @@ if __name__ == '__main__':
     model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.01),
                   loss='categorical_crossentropy',
                   metrics=['accuracy'])
-
+    model.summary()
     lr_decay_callback = tf.keras.callbacks.LearningRateScheduler(cnn.cnn_tools.lr_decay, verbose=True)
 
     BATCH_SIZE = 64

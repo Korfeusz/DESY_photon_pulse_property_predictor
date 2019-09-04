@@ -2,7 +2,6 @@ from os import listdir
 from os.path import isfile, join
 
 import constants
-from beam_profiles_preprocessing import constants
 import numpy as np
 import h5py
 from beam_profiles_preprocessing.beam_profiles_pipeline import BeamProfilesPipeline

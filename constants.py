@@ -11,10 +11,10 @@ metadata_file = 'metadata/metadata.json'
 experiment_name = '0'
 
 cnn_train_test_split_data_directory = '/beegfs/desy/user/brockhul/cnn_train_test_split_data/'
-cnn_model_saveas = 'model/model_less_in_dense.h5'
+cnn_model_saveas = 'model/model_main_less_epochs.h5'
 cnn_log_dir = 'logs/fit/'
 
-autoencoder_model_name = 'autoencoder_tst'
+autoencoder_model_name = 'autoencoder_tst_1'
 autoencoder_codes_save = '/beegfs/desy/user/brockhul/autoencoder_codes/{}.npy'.format(autoencoder_model_name)
 autoencoder_model_save = 'model/{}.h5'.format(autoencoder_model_name)
 encoder_save = 'model/{}_encoder.h5'.format(autoencoder_model_name)

@@ -1,4 +1,5 @@
 from .prediction_tools import get_predictions_from_model
 from .prediction_plotting import show_random_100_images_with_labels
 from .prediction_plotting import plot_0_1_composition_of_runs
+from .prediction_tools import get_confusion_matrix
 from . import mean_profile_tools
