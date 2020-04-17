@@ -29,7 +29,7 @@ First the constants.py file has to be modified and the proper path to the beam p
 An example run input file is here:
 #### Example run input json:
  
- ``` json
+ 
  {
     "experiment_name": "0", # The name of the current test run
     "profiles_range": 0, # Supplying a list would just import the list, any other value means importing all profiles
@@ -52,7 +52,6 @@ An example run input file is here:
         "fraction": 0.8
     }
 }
- ```
 ### Metadata creation
 
 ### Labeling
