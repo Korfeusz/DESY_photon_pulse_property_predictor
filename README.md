@@ -76,10 +76,11 @@ A convolutional neural network algorithm. The architecture of the network is def
 ### Autoencoder
 An autoencoder is used to encode the beam profiles. The model again is saved to the disk. The encoded files are saved in a numpy format, the location of which is saved to the metadata file.
 ### PCA
-
+This is a tool for performing principal component analysis on the beam profiles or on the data encoded by the autoencoder. various plots may be generated.
 ### Imaging tools
-
+An imaing tool used to generate visualisations of the beam profiles
 ## Example metadata json:
+An example metadata json file and the possible keys are shown here:
 ``` json
  "0_1": {
     "address": {
