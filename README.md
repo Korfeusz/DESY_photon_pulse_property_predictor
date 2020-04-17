@@ -27,9 +27,19 @@ To use please make sure that all the packages from the requirements.txt file are
 ### Importing
 First the constants.py file has to be modified and the proper path to the beam profiles on the machine "experiment_data_directory" and the path to the profiles inside the hdf file  "beam_profiles_path" have to be supplied. The "run_inputs_save_file" variable is the name of the .json metadata file, where each profile will get its own entry and all subsequently created information about the profile will be stored. The "run_input_file_template" is the location of the settings for each run, where runs are labelled by integers and will be formatted into the template. The "run_numbers" list specifies which runs should be processed. The beam profiles after preprocessing will be stored in a numpy format. Preprocessing constitutes cropping, removing the backround, rescaling and shifting the image to the center of the peak. The last operation can be done either by shifting to the highest intensity or to the center of mass of the image. 
 An example run input file is here:
+The parameters of the .json file are:
+- "experiment_name": "0", # The name of the current test run
+- "profiles_range": 0, # Supplying a list would just import the list, any other value means importing all profiles
+- "slice": { # Cropping parameters in pixel  
+-   "final_color_resolution": 63, # The final number of distinct values to be encoded on the image
+- "run_number": 2, # The beam run number
+- "background_cut_off": 0.6, # The fraction of the maximum pixel value at which the backround is cut off, or the fraction of the maximal energy of the beam
+- "horizontal_scaling_factor": 1.2, # The factor by which the image should be downscaled
+- "shifting": { # The parameters used for shifting the beam peak to the center
+- "type": "highest_intensity", # The type of shifting, the other one is "center_of_mass"
 #### Example run input json:
  
- 
+ ```json
  {
     "experiment_name": "0", # The name of the current test run
     "profiles_range": 0, # Supplying a list would just import the list, any other value means importing all profiles
@@ -52,6 +62,7 @@ An example run input file is here:
         "fraction": 0.8
     }
 }
+```
 ### Metadata creation
 
 ### Labeling
