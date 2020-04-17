@@ -72,9 +72,9 @@ The information appended is:
 ### Labeling
 Here labels are added to the metadata .json file that will be used to train the convolutional neural network. The labels are created by thresholding the gaussianeity measures produced in the previous step or by an OR operation on other labels. The data is also split into a test and a train set. This is to ensure that the train set will never be used to evaluate the model.
 ### CNN
-
+A convolutional neural network algorithm. The architecture of the network is defined in the cnn.network_model.py file. The model after training is saved to the disk space for later use.
 ### Autoencoder
-
+An autoencoder is used to encode the beam profiles. The model again is saved to the disk. The encoded files are saved in a numpy format, the location of which is saved to the metadata file.
 ### PCA
 
 ### Imaging tools
