@@ -30,20 +30,20 @@ An example run input file is here:
 The parameters of the .json file are:
 - "experiment_name": "0", # The name of the current test run
 - "profiles_range": 0, # Supplying a list would just import the list, any other value means importing all profiles
-- "slice": { # Cropping parameters in pixel  
--   "final_color_resolution": 63, # The final number of distinct values to be encoded on the image
+- "slice":  # Cropping parameters in pixel  
+-  "final_color_resolution": 63, # The final number of distinct values to be encoded on the image
 - "run_number": 2, # The beam run number
 - "background_cut_off": 0.6, # The fraction of the maximum pixel value at which the backround is cut off, or the fraction of the maximal energy of the beam
 - "horizontal_scaling_factor": 1.2, # The factor by which the image should be downscaled
-- "shifting": { # The parameters used for shifting the beam peak to the center
+- "shifting": # The parameters used for shifting the beam peak to the center
 - "type": "highest_intensity", # The type of shifting, the other one is "center_of_mass"
 #### Example run input json:
  
  ```json
  {
-    "experiment_name": "0", # The name of the current test run
-    "profiles_range": 0, # Supplying a list would just import the list, any other value means importing all profiles
-    "slice": { # Cropping parameters in pixels
+    "experiment_name": "0", 
+    "profiles_range": 0, 
+    "slice": { 
         "horizontal": {
             "min": 105,
             "max": 364
@@ -53,12 +53,12 @@ The parameters of the .json file are:
             "max": 349
         }
     },
-    "final_color_resolution": 63, # The final number of distinct values to be encoded on the image
-    "run_number": 2, # The beam run number
-    "background_cut_off": 0.6, # The fraction of the maximum pixel value at which the backround is cut off, or the fraction of the maximal energy of the beam
-    "horizontal_scaling_factor": 1.2, # The factor by which the image should be downscaled
-    "shifting": { # The parameters used for shifting the beam peak to the center
-        "type": "highest_intensity", # The type of shifting, the other one is "center_of_mass"
+    "final_color_resolution": 63,
+    "run_number": 2, 
+    "background_cut_off": 0.6,
+    "horizontal_scaling_factor": 1.2, 
+    "shifting": { 
+        "type": "highest_intensity"
         "fraction": 0.8
     }
 }
