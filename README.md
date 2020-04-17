@@ -64,9 +64,13 @@ The parameters of the .json file are:
 }
 ```
 ### Metadata creation
-
+This stage of the process is concerned with the creation of metadata for each profile. This file reads the profiles saved in the preprocessing step and appends information to the metadata file. 
+The information appended is:
+- The address of the beam profile (the run from which it came and the index inside the run),
+- a true/false label whether the image is obviously an artefact (the total intensity is too high),
+- a measure of the gaussianeity is added, two methods are available.
 ### Labeling
-
+Here labels are added to the metadata .json file that will be used to train the convolutional neural network. The labels are created by thresholding the gaussianeity measures produced in the previous step or by an OR operation on other labels. The data is also split into a test and a train set. This is to ensure that the train set will never be used to evaluate the model.
 ### CNN
 
 ### Autoencoder
