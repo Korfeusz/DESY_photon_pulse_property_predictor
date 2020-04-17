@@ -22,7 +22,49 @@ The project can be divided into:
 
 ## Usage
 
-To use please make sure that all the packages from the requirements.txt file are installed.
+To use please make sure that all the packages from the requirements.txt file are installed. Using this project consists of the sequential use of the tools, each of which creates a permanent record on the device to be used by the next step. This way the next step is independent of the previous one and changing a parameter does not mean re-running everyhing.
+
+### Importing
+First the constants.py file has to be modified and the proper path to the beam profiles on the machine "experiment_data_directory" and the path to the profiles inside the hdf file  "beam_profiles_path" have to be supplied. The "run_inputs_save_file" variable is the name of the .json metadata file, where each profile will get its own entry and all subsequently created information about the profile will be stored. The "run_input_file_template" is the location of the settings for each run, where runs are labelled by integers and will be formatted into the template. The "run_numbers" list specifies which runs should be processed. The beam profiles after preprocessing will be stored in a numpy format. Preprocessing constitutes cropping, removing the backround, rescaling and shifting the image to the center of the peak. The last operation can be done either by shifting to the highest intensity or to the center of mass of the image. 
+An example run input file is here:
+
+#### Example run input json:
+ 
+ ``` json
+ {
+    "experiment_name": "0",
+    "profiles_range": 0,
+    "slice": {
+        "horizontal": {
+            "min": 105,
+            "max": 364
+        },
+        "vertical": {
+            "min": 90,
+            "max": 349
+        }
+    },
+    "final_color_resolution": 63,
+    "run_number": 2,
+    "background_cut_off": 0.6,
+    "horizontal_scaling_factor": 1.2,
+    "shifting": {
+        "type": "highest_intensity",
+        "fraction": 0.8
+    }
+}
+ ```
+### Metadata creation
+
+### Labeling
+
+### CNN
+
+### Autoencoder
+
+### PCA
+
+### Imaging tools
 
 ## Example metadata json:
 ``` json
@@ -79,29 +121,4 @@ To use please make sure that all the packages from the requirements.txt file are
     }
   },
  ```
- ## Example run input json:
  
- ``` json
- {
-    "experiment_name": "0",
-    "profiles_range": 0,
-    "slice": {
-        "horizontal": {
-            "min": 105,
-            "max": 364
-        },
-        "vertical": {
-            "min": 90,
-            "max": 349
-        }
-    },
-    "final_color_resolution": 63,
-    "run_number": 2,
-    "background_cut_off": 0.6,
-    "horizontal_scaling_factor": 1.2,
-    "shifting": {
-        "type": "highest_intensity",
-        "fraction": 0.8
-    }
-}
- ```
