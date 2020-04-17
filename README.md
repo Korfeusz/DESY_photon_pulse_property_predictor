@@ -58,7 +58,7 @@ The parameters of the .json file are:
     "background_cut_off": 0.6,
     "horizontal_scaling_factor": 1.2, 
     "shifting": { 
-        "type": "highest_intensity"
+        "type": "highest_intensity",
         "fraction": 0.8
     }
 }
