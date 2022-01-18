@@ -2,10 +2,16 @@
 
 ## Overview
 
-The main purpose of this code is the analysis of beam profiles taken at DESY's FLASH 2 facility. There were two distinct stages to the project:
+The main purpose of this code is the analysis of beam profiles taken at DESY FLASH 2 facility. There were two distinct stages to the project:
 
 1. Determining the Gaussianeity of the profiles using computer vision and machine learning.
 2. Reduction of dimensions for analysis of the beam profiles in terms of machine settings, Gaussianeity and other labels.
+
+The project aims at labelling pulses of a free-electron laser as the two categories of zero-order and higher-order.
+Furthermore, an unsupervised algorithm categorises the taken data and the supervised labelling applies to each category.
+By humane inference, each category is assigned to a source state. The supervised labelling would reveal the source tendency to whether generate zero-order pulses
+in that state.
+
 
 ## Division
 
